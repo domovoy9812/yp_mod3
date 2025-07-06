@@ -1,0 +1,33 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: gateway-application
+  cloud:
+    discovery:
+      locator:
+        enabled: true
+        lower-case-service-id: true
+    consul:
+      host: localhost
+      port: 8500
+    gateway:
+      routes:
+        - id: ui  # ID роута
+          uri: lb://ui-application
+          predicates:
+            - Path=/bank-ui/**
+          filters:
+            - RewritePath=/bank-ui/?(?<segment>.*), /$\{segment} # фильтр, модифицирующий запрос к целевому сервису (убирается имя сервиса в начале)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    info:
+      show-details: always
+    health:
+      show-details: always
+      probes:
+        enabled: true

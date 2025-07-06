@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: accounts-application
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: update
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+#      config:
+#        enabled: true            # Включаем Consul Config для внешней конфигурации
+#        prefix: config           # Префикс в KV-хранилище Consul (по умолчанию "config")
+#        defaultContext: application  # Контекст по умолчанию
+#  config:
+#    import: consul
+#    import: consul:localhost:8500/config/ui-application/
+server:
+  port: 8081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    info:
+      show-details: always
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: '*'
+          show-details: always

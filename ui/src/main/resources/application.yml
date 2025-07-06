@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: ui-application
+  cloud:
+    discovery:
+      locator:
+        enabled: true
+        lower-case-service-id: true
+    consul:
+#      discovery:
+#        healthCheckPath: /actuator/health
+#        healthCheckInterval: 20s
+      host: localhost
+      port: 8500
+#      config:
+#        format: yaml
+#  config:
+#    import: consul
+#    import: consul:localhost:8500/config/ui-application/
+#server:
+#  port: ${SERVER_PORT:8080}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    info:
+      show-details: always
+    health:
+      show-details: always
+      probes:
+        enabled: true
