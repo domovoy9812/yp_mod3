@@ -58,5 +58,6 @@ services:
     ports:
       - "8500:8500"
     command: ["agent", "-dev", "-ui", "-client=0.0.0.0", "-data-dir=/consul/data"]
+#    command: ["agent", "-ui", "-client=0.0.0.0", "-data-dir=/consul/data"]
     volumes:
       - ./consul/data:/consul/data
