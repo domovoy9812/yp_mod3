@@ -2,9 +2,11 @@ package ru.yandex.practicum.bliushtein.mod3.ui;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
+import ru.yandex.practicum.bliushtein.mod3.shared.SharedConfigAutoConfiguration;
 
 @SpringBootApplication
-//@EnableDiscoveryClient
+@Import(SharedConfigAutoConfiguration.class)
 public class UIApplication {
 
 	public static void main(String[] args) {

@@ -6,8 +6,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_CLOUD_CONSUL_HOST: consul
-      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CONFIG_IMPORT: consul:consul:8500
     depends_on:
       - consul
   ui:
@@ -15,8 +14,7 @@ services:
       context: ui
       dockerfile: Dockerfile
     environment:
-      SPRING_CLOUD_CONSUL_HOST: consul
-      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CONFIG_IMPORT: consul:consul:8500
     depends_on:
       - consul
   accounts:
@@ -52,12 +50,13 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
-
   consul:
     image: hashicorp/consul:latest
     ports:
       - "8500:8500"
-    command: ["agent", "-dev", "-ui", "-client=0.0.0.0", "-data-dir=/consul/data"]
+    command: "sh /consul/init/start.sh"
+#    command: "agent -dev -ui -client=0.0.0.0 -data-dir=/consul/data"
+#    command: ["agent", "-dev", "-ui", "-client=0.0.0.0", "-data-dir=/consul/data", "&&", "./consul", "kv", "import", "@import.json"]
 #    command: ["agent", "-ui", "-client=0.0.0.0", "-data-dir=/consul/data"]
     volumes:
-      - ./consul/data:/consul/data
+      - ./consul:/consul

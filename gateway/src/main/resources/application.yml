@@ -3,18 +3,15 @@ server:
 spring:
   application:
     name: gateway-application
+  config:
+    import: consul:localhost:8500
   cloud:
-    discovery:
-      locator:
-        enabled: true
-        lower-case-service-id: true
     consul:
-      host: localhost
-      port: 8500
+      enabled: true
     gateway:
       routes:
         - id: ui  # ID роута
-          uri: lb://ui-application
+          uri: "lb://${ui-service-name}"
           predicates:
             - Path=/bank-ui/**
           filters:

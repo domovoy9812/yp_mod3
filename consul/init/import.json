@@ -1,0 +1,32 @@
+[
+  {
+    "key": "config/application/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/application/accounts-service-name",
+    "flags": 0,
+    "value": "YWNjb3VudHMtYXBwbGljYXRpb24="
+  },
+  {
+    "key": "config/application/ui-service-name",
+    "flags": 0,
+    "value": "dWktYXBwbGljYXRpb24="
+  },
+  {
+    "key": "config/ui-application/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/ui-application/config_value_from_consul",
+    "flags": 0,
+    "value": "aGVsbG8gZnJvbSBDb25zdWw="
+  },
+  {
+    "key": "config/ui-application/server.port",
+    "flags": 0,
+    "value": "ODA4MA=="
+  }
+]

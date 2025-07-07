@@ -31,15 +31,15 @@ repositories {
 }
 
 dependencies {
+	implementation(project(":shared"))
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	//implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	//implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	//implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
+	implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
 	implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
-	//implementation("org.springframework.cloud:spring-cloud-starter-config")
 	//implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

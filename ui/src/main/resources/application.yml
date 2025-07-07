@@ -2,23 +2,13 @@ spring:
   application:
     name: ui-application
   cloud:
-    discovery:
-      locator:
-        enabled: true
-        lower-case-service-id: true
     consul:
-#      discovery:
-#        healthCheckPath: /actuator/health
-#        healthCheckInterval: 20s
-      host: localhost
-      port: 8500
-#      config:
-#        format: yaml
-#  config:
-#    import: consul
-#    import: consul:localhost:8500/config/ui-application/
-#server:
-#  port: ${SERVER_PORT:8080}
+      config:
+        enabled: true
+#        format: YAML
+#        data-key: data
+  config:
+    import: consul:localhost:8500
 management:
   endpoints:
     web:
@@ -31,3 +21,7 @@ management:
       show-details: always
       probes:
         enabled: true
+logging:
+  level:
+    org:
+      springframework: DEBUG
