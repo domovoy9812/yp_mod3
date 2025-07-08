@@ -31,6 +31,7 @@ repositories {
 
 dependencies {
 	//implementation("org.springframework.boot:spring-boot-autoconfigure")
+	implementation("org.springframework.security:spring-security-core")
 	implementation("org.springframework.boot:spring-boot-starter")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

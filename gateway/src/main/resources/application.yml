@@ -10,12 +10,12 @@ spring:
       enabled: true
     gateway:
       routes:
-        - id: ui  # ID роута
-          uri: "lb://${ui-service-name}"
+        - id: accounts
+          uri: "lb://${accounts-service-name}"
           predicates:
-            - Path=/bank-ui/**
+            - Path=/account-service/**
           filters:
-            - RewritePath=/bank-ui/?(?<segment>.*), /$\{segment} # фильтр, модифицирующий запрос к целевому сервису (убирается имя сервиса в начале)
+            - RewritePath=/account-service/?(?<segment>.*), /$\{segment}
 management:
   endpoints:
     web:

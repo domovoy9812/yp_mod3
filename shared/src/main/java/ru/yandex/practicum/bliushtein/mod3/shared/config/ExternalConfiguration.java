@@ -8,5 +8,5 @@ import lombok.Getter;
 public class ExternalConfiguration {
     private final String uiServiceName;
     private final String accountsServiceName;
-
+    private final String gatewayServiceName;
 }

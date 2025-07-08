@@ -11,15 +11,10 @@ spring:
           auto: update
   cloud:
     consul:
-      host: localhost
-      port: 8500
-#      config:
-#        enabled: true            # Включаем Consul Config для внешней конфигурации
-#        prefix: config           # Префикс в KV-хранилище Consul (по умолчанию "config")
-#        defaultContext: application  # Контекст по умолчанию
-#  config:
-#    import: consul
-#    import: consul:localhost:8500/config/ui-application/
+      config:
+        enabled: true
+  config:
+    import: consul:localhost:8500
 server:
   port: 8081
 management:

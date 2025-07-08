@@ -10,6 +10,11 @@
     "value": "YWNjb3VudHMtYXBwbGljYXRpb24="
   },
   {
+    "key": "config/application/gateway-service-name",
+    "flags": 0,
+    "value": "Z2F0ZXdheS1hcHBsaWNhdGlvbg=="
+  },
+  {
     "key": "config/application/ui-service-name",
     "flags": 0,
     "value": "dWktYXBwbGljYXRpb24="

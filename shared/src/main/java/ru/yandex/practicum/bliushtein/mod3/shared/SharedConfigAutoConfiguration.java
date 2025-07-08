@@ -10,7 +10,8 @@ public class SharedConfigAutoConfiguration {
 
     @Bean
     public ExternalConfiguration externalConfiguration(@Value("${ui-service-name}") String uiServiceName,
-                                                       @Value("${accounts-service-name}") String accountsServiceName) {
-        return new ExternalConfiguration(uiServiceName, accountsServiceName);
+                                                       @Value("${accounts-service-name}") String accountsServiceName,
+                                                       @Value("${gateway-service-name}") String gatewayServiceName) {
+        return new ExternalConfiguration(uiServiceName, accountsServiceName, gatewayServiceName);
     }
 }

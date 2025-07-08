@@ -1,0 +1,48 @@
+services:
+  consul:
+    image: hashicorp/consul:latest
+    ports:
+      - "8500:8500"
+    command: "sh /consul/init/start.sh"
+    volumes:
+      - ./consul:/consul
+  postgresql-keycloak:
+    image: "postgres:17"
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+      PGPORT: 5430
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5430:5430"
+    volumes:
+      - ./keycloak/pgdata:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+  keycloak:
+    image: bitnami/keycloak
+    restart: always
+    ports:
+      - "8084:8084"
+    environment:
+      KEYCLOAK_HTTP_PORT: 8084
+      KEYCLOAK_ADMIN_USER: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_DATABASE_HOST: postgresql-keycloak
+      KEYCLOAK_DATABASE_PORT: 5430
+      KEYCLOAK_DATABASE_NAME: keycloak
+      KEYCLOAK_DATABASE_USER: keycloak
+      KEYCLOAK_DATABASE_PASSWORD: keycloak
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8084" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      postgresql-keycloak:
+        condition: service_healthy

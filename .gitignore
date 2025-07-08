@@ -38,3 +38,5 @@ out/
 
 /consul/data/**
 /accounts/pgdata/**
+
+/keycloak/pgdata/**
