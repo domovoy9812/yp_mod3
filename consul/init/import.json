@@ -15,6 +15,11 @@
     "value": "Z2F0ZXdheS1hcHBsaWNhdGlvbg=="
   },
   {
+    "key": "config/application/keycloak_url",
+    "flags": 0,
+    "value": "aHR0cDovL2tleWNsb2FrOjgwODQvcmVhbG1zL2Jhbms="
+  },
+  {
     "key": "config/application/ui-service-name",
     "flags": 0,
     "value": "dWktYXBwbGljYXRpb24="
