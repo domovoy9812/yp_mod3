@@ -45,7 +45,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation(project(":shared-test"))
 }
 
 tasks.withType<Test> {
