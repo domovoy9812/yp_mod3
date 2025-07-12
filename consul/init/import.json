@@ -30,11 +30,6 @@
     "value": ""
   },
   {
-    "key": "config/ui-application/config_value_from_consul",
-    "flags": 0,
-    "value": "aGVsbG8gZnJvbSBDb25zdWw="
-  },
-  {
     "key": "config/ui-application/server.port",
     "flags": 0,
     "value": "ODA4MA=="
