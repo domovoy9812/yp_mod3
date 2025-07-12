@@ -7,6 +7,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "accounts", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "currency"}))
 public class AccountEntity {
