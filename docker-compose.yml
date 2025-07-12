@@ -27,6 +27,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
+      - "8181:8181"
     environment:
       SPRING_CONFIG_IMPORT: consul:consul:8500
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-accounts:5434/accounts_db

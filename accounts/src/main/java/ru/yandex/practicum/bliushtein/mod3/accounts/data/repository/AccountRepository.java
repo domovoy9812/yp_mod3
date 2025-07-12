@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
     List<AccountEntity> findAllByUser(BankUserEntity user);
+    AccountEntity findByUserAndCurrency(BankUserEntity user, String currency);
+    AccountEntity findByUserIdAndCurrency(Long userId, String currency);
+    Long deleteByUserAndCurrency(BankUserEntity userEntity, String currency);
 }

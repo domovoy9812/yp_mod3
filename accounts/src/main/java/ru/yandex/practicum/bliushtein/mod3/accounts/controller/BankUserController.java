@@ -1,13 +1,15 @@
 package ru.yandex.practicum.bliushtein.mod3.accounts.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bliushtein.mod3.accounts.AccountServiceException;
 import ru.yandex.practicum.bliushtein.mod3.accounts.service.BankUserService;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.BankUser;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.BankUserWithPassword;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.CreateUserRequest;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.CreateUserRequest;
 
+@Slf4j
 @RestController
 @RequestMapping("/account-service/user")
 public class BankUserController {
@@ -36,5 +38,11 @@ public class BankUserController {
     @DeleteMapping("/{name}")
     public void deleteBankUser(@PathVariable String name) throws AccountServiceException {
         bankUserService.deleteBankUser(name);
+    }
+
+    @ExceptionHandler
+    public void handleException(Throwable exception) throws Throwable {
+        log.error("-----exception in BankUserController: " + exception.getMessage(), exception);
+        throw exception;
     }
 }

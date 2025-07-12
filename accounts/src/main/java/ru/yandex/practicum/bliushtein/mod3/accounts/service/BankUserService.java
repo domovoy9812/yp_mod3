@@ -9,8 +9,8 @@ import ru.yandex.practicum.bliushtein.mod3.accounts.data.entity.BankUserEntity;
 import ru.yandex.practicum.bliushtein.mod3.accounts.data.repository.AccountRepository;
 import ru.yandex.practicum.bliushtein.mod3.accounts.data.repository.BankUserRepository;
 import ru.yandex.practicum.bliushtein.mod3.accounts.mapper.BankUserMapper;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.BankUser;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.BankUserWithPassword;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
 
 import java.util.List;
 

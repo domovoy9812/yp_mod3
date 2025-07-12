@@ -6,9 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.yandex.practicum.bliushtein.mod3.shared.config.ExternalConfiguration;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.BankUser;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.BankUserWithPassword;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.CreateUserRequest;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.CreateUserRequest;
 
 @Slf4j
 @Component

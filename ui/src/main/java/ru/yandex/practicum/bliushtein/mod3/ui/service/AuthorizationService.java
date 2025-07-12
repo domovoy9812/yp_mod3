@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.BankUserWithPassword;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
 
 import java.util.List;
 

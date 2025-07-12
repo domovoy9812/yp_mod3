@@ -17,7 +17,7 @@ public class BankUserEntity {
     //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     //List<AccountEntity> accounts;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NonNull
     private String name;
 

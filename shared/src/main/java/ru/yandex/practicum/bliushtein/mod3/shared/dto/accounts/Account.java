@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.mod3.shared.dto;
+package ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
