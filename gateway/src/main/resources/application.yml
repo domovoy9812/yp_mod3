@@ -4,7 +4,7 @@ spring:
   application:
     name: gateway-application
   config:
-    import: consul:localhost:8500
+    import: optional:consul:localhost:8500
   cloud:
     consul:
       enabled: true

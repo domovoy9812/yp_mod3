@@ -33,7 +33,7 @@ public class AccountRepositoryTest extends AbstractTestWithTestcontainers {
 
     @Test
     @Transactional
-    void test() {
+    void testSaveAndFind() {
         AccountEntity account = accountRepository.save(createAccountEntity(DEFAULT_CURRENCY, user));
         List<AccountEntity> foundAccounts = accountRepository.findAllByUser(user);
         assertEquals(1, foundAccounts.size());

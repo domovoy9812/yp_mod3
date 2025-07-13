@@ -1,10 +1,12 @@
 package ru.yandex.practicum.bliushtein.mod3.ui.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bliushtein.mod3.ui.service.BankUserClient;
 
+@Slf4j
 @RestController
 @RequestMapping("/main")
 public class MainController {
@@ -26,6 +28,8 @@ public class MainController {
                              @RequestParam String firstName,
                              @RequestParam String lastName,
                              @RequestParam String email) {
+        log.debug("calling bankUserClient.createUser with name='{}', password='{}', firstName='{}', lastName='{}', email='{}'",
+                name, password, firstName, lastName, email);
         return bankUserClient.createUser(name, password, firstName, lastName, email).toString();
     }
 

@@ -1,7 +1,23 @@
+import org.springframework.cloud.contract.verifier.plugin.ContractVerifierExtension
+
 plugins {
 	java
 	id("org.springframework.boot")
 	id("io.spring.dependency-management")
+	id("org.springframework.cloud.contract")
+	id("maven-publish")
+}
+configure<ContractVerifierExtension> {
+	baseClassForTests.set("ru.yandex.practicum.bliushtein.mod3.accounts.contract.BaseContractTest")
+}
+
+publishing {
+	repositories {
+		mavenLocal()
+/*		flatDir {
+			dirs("C:/Users/Home/.m2/repository")
+		}*/
+	}
 }
 
 group = "ru.yandex.practicum.bliushtein"
@@ -26,6 +42,7 @@ configurations {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 }
 
@@ -46,6 +63,7 @@ dependencies {
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation(project(":shared-test"))
+	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
 }
 
 tasks.withType<Test> {

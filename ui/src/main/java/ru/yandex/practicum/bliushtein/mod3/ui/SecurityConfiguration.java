@@ -3,6 +3,7 @@ package ru.yandex.practicum.bliushtein.mod3.ui;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +14,7 @@ import ru.yandex.practicum.bliushtein.mod3.ui.service.AuthorizationService;
 
 @Configuration
 @EnableWebSecurity
+@Profile("!test")
 public class SecurityConfiguration {
 
     @Bean
