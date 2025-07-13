@@ -16,7 +16,12 @@ spring:
             - Path=/account-service/**
           filters:
             - TokenRelay=gateway-client
-#            - RewritePath=/account-service/?(?<segment>.*), /$\{segment}
+        - id: notification
+          uri: "lb://${notification-service-name}"
+          predicates:
+            - Path=/notification/**
+          filters:
+            - TokenRelay=gateway-client
   security:
     oauth2:
       client:

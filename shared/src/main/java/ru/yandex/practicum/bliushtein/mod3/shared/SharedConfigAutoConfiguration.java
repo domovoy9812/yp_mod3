@@ -9,9 +9,12 @@ import ru.yandex.practicum.bliushtein.mod3.shared.config.ExternalConfiguration;
 public class SharedConfigAutoConfiguration {
 
     @Bean
-    public ExternalConfiguration externalConfiguration(@Value("${ui-service-name:localhost:8080}") String uiServiceName,
-                                                       @Value("${accounts-service-name:localhost:8081}") String accountsServiceName,
-                                                       @Value("${gateway-service-name:localhost:8082}") String gatewayServiceName) {
-        return new ExternalConfiguration(uiServiceName, accountsServiceName, gatewayServiceName);
+    public ExternalConfiguration externalConfiguration(
+            @Value("${ui-service-name:localhost:8080}") String uiServiceName,
+            @Value("${accounts-service-name:localhost:8081}") String accountsServiceName,
+            @Value("${gateway-service-name:localhost:8082}") String gatewayServiceName,
+            @Value("${notification-service-name:localhost:8083}") String notificationServiceName) {
+        return new ExternalConfiguration(uiServiceName, accountsServiceName, gatewayServiceName,
+                notificationServiceName);
     }
 }

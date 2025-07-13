@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: notification-application
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: update
+  cloud:
+    consul:
+      config:
+        enabled: true
+  config:
+    import: optional:consul:localhost:8500
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/certs
+server:
+  port: 8083
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    info:
+      show-details: always
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: '*'
+          show-details: always
+logging:
+  level:
+    org:
+      springframework: TRACE
+    ru:
+      yandex:
+        practicum:
+          bliushtein:
+            mod3: DEBUG

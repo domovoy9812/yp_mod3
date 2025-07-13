@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(TestSecurityConfiguration.class)
 @ActiveProfiles("test")
 @AutoConfigureStubRunner(
-        ids = {"ru.yandex.practicum.bliushtein:accounts:+:stubs:8082"},
+        ids = {"ru.yandex.practicum.bliushtein:accounts:+:stubs:8282"},
         stubsMode = StubRunnerProperties.StubsMode.LOCAL
 )
 

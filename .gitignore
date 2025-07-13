@@ -37,6 +37,4 @@ out/
 .vscode/
 
 /consul/data/**
-/accounts/pgdata/**
-
-/keycloak/pgdata/**
+/**/pgdata/**

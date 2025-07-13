@@ -55,6 +55,40 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+  notification:
+    build:
+      context: notification
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+      - "8183:8183"
+    environment:
+      SPRING_CONFIG_IMPORT: consul:consul:8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-notification:5435/notification_db
+      SPRING_DATASOURCE_USERNAME: notification_user
+      SPRING_DATASOURCE_PASSWORD: 12345
+    depends_on:
+      - consul
+      - postgresql-notification
+      - keycloak
+  postgresql-notification:
+    image: "postgres:17"
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: notification_user
+      POSTGRES_PASSWORD: 12345
+      PGPORT: 5435
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5435:5435"
+    volumes:
+      - ./notification/pgdata:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
   consul:
     image: hashicorp/consul:latest
     ports:
