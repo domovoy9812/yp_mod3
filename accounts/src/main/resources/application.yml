@@ -17,6 +17,17 @@ spring:
     import: optional:consul:localhost:8500
   security:
     oauth2:
+      client:
+        registration:
+          accounts:
+            provider: keycloak
+            client-id: accounts_client_id
+            client-secret: B0PIGmbwqsz4YIWJT9Z5DLl35t83hbUF
+            authorization-grant-type: client_credentials
+            scope: notification.write
+        provider:
+          keycloak:
+            token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token
       resourceserver:
         jwt:
           jwk-set-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/certs

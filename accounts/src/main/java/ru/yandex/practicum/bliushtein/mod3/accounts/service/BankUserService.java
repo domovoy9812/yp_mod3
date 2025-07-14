@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.bliushtein.mod3.accounts.AccountServiceException;
+import ru.yandex.practicum.bliushtein.mod3.accounts.client.NotificationClient;
 import ru.yandex.practicum.bliushtein.mod3.accounts.data.entity.AccountEntity;
 import ru.yandex.practicum.bliushtein.mod3.accounts.data.entity.BankUserEntity;
 import ru.yandex.practicum.bliushtein.mod3.accounts.data.repository.AccountRepository;
@@ -20,13 +21,15 @@ public class BankUserService {
     private final BankUserRepository userRepository;
     private final AccountRepository accountRepository;
     private final BankUserMapper userMapper;
-
+    private final NotificationClient notificationClient;
     public BankUserService(@Autowired BankUserRepository userRepository,
                            @Autowired AccountRepository accountRepository,
-                           @Autowired BankUserMapper userMapper) {
+                           @Autowired BankUserMapper userMapper,
+                           @Autowired NotificationClient notificationClient) {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
         this.userMapper = userMapper;
+        this.notificationClient = notificationClient;
     }
 
     public BankUser findBankUser(String name) {
@@ -38,6 +41,7 @@ public class BankUserService {
     public BankUserWithPassword findBankUserToAuthenticate(String name) {
         log.info("AccountService called for {}", name);
         BankUserEntity userEntity = userRepository.findByName(name);
+        notificationClient.sendNotification(userEntity.getEmail(), "Someone getting your credentials!");
         return userMapper.toBankUserWithPasswordDto(userEntity);
     }
 

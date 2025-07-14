@@ -24,7 +24,7 @@ public class SecurityConfiguration {
         return security
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                //.anyRequest().authenticated()
+                                .requestMatchers("/notification/**").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(oauth2 ->
