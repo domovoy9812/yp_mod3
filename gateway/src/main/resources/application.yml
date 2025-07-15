@@ -15,34 +15,26 @@ spring:
           predicates:
             - Path=/account-service/**
           filters:
-            - TokenRelay=gateway-client
+            - TokenRelay
         - id: notification
           uri: "lb://${notification-service-name}"
           predicates:
             - Path=/notification/**
           filters:
-            - TokenRelay=gateway-client
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-#            issuer-uri: ${keycloak_url:http://localhost:8084/realms/bank}
-            token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token
-#            authorization-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/auth
+            - TokenRelay
+#  security:
+#    oauth2:
+#      client:
+#        provider:
+#          keycloak:
 #            token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token
-#            user-info-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/userinfo
-#            user-name-attribute: sub
-#            jwk-set-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/certs
-        registration:
-          gateway-client:
-            provider: keycloak
-            client-id: gateway_client_id
-            client-secret: 8jRYUyFquHKqenM8Edatj090NUE4ArIG
-            scope: accounts.read, accounts.write
-            authorization-grant-type: client_credentials
-#            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
-#            clientAuthenticationMethod: client_secret_post
+#        registration:
+#          gateway-client:
+#            provider: keycloak
+#            client-id: gateway_client_id
+#            client-secret: 8jRYUyFquHKqenM8Edatj090NUE4ArIG
+#            scope: accounts.read, accounts.write
+#            authorization-grant-type: client_credentials
 management:
   endpoints:
     web:

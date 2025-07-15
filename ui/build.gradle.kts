@@ -33,6 +33,8 @@ repositories {
 	mavenLocal()
 }
 
+
+
 dependencies {
 	implementation(project(":shared"))
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -41,8 +43,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
-	implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
+	//implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
+	//implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
 	//implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
@@ -54,7 +56,9 @@ dependencies {
 	//testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
-
+configurations.implementation {
+	exclude(group = "org.springframework.boot", module = "spring-boot-starter-oauth2-resource-server")
+}
 tasks.withType<Test> {
 	useJUnitPlatform()
 }

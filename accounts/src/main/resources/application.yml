@@ -1,3 +1,4 @@
+keycloak_client_id: accounts
 spring:
   application:
     name: accounts-application

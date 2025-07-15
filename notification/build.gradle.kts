@@ -50,9 +50,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
-	implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
+	//implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	//implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
+	//implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	runtimeOnly("org.postgresql:postgresql")
 	compileOnly("org.projectlombok:lombok")
@@ -62,7 +62,9 @@ dependencies {
 	testImplementation(project(":shared-test"))
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
 }
-
+configurations.implementation {
+	exclude(group = "org.springframework.boot", module = "spring-boot-starter-oauth2-client")
+}
 tasks.withType<Test> {
 	useJUnitPlatform()
 }

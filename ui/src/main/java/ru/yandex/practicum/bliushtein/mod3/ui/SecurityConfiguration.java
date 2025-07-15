@@ -13,7 +13,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import ru.yandex.practicum.bliushtein.mod3.ui.service.AuthorizationService;
 
 @Configuration
-@EnableWebSecurity
 @Profile("!test")
 public class SecurityConfiguration {
 

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import ru.yandex.practicum.bliushtein.mod3.shared.config.ExternalConfiguration;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
@@ -18,29 +19,42 @@ public class BankUserClient {
     private final static String DELETE_USER_URL_TEMPLATE = "http://%s/account-service/user/{name}";
 
     private final ExternalConfiguration extConfig;
-    private final RestTemplate restTemplate;
+    private final RestClient.Builder restClientBuilder;
     private final PasswordEncoder passwordEncoder;
     public BankUserClient(@Autowired ExternalConfiguration extConfig,
-                          @Autowired RestTemplate restTemplate,
+                          @Autowired RestClient.Builder restClientBuilder,
                           @Autowired PasswordEncoder passwordEncoder) {
         this.extConfig = extConfig;
-        this.restTemplate = restTemplate;
+        this.restClientBuilder = restClientBuilder;
         this.passwordEncoder = passwordEncoder;
     }
 
     public BankUserWithPassword findUserByUsername(String name) {
         log.info("BankUserService executed for {}", name);
-        return restTemplate.getForObject(GET_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()),
-                BankUserWithPassword.class, name);
+        return restClientBuilder.build().get()
+                .uri(GET_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name)
+                .retrieve()
+                .body(BankUserWithPassword.class);
+        /*return restTemplate.getForObject(GET_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()),
+                BankUserWithPassword.class, name);*/
     }
 
     public BankUser createUser(String name, String password, String firstName, String lastName, String email) {
         String encodedPassword = passwordEncoder.encode(password);
-        return restTemplate.postForObject(USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()),
-                new CreateUserRequest(name, encodedPassword, firstName, lastName, email), BankUser.class);
+        return restClientBuilder.build().post()
+                .uri(USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()))
+                .body(new CreateUserRequest(name, encodedPassword, firstName, lastName, email))
+                .retrieve()
+                .body(BankUser.class);
+        /*return restTemplate.postForObject(USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()),
+                , BankUser.class);*/
     }
 
     public void deleteUser(String name) {
-        restTemplate.delete(DELETE_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name);
+        restClientBuilder.build().delete()
+                .uri(DELETE_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name)
+                .retrieve()
+                .toBodilessEntity();
+        /*restTemplate.delete(DELETE_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name);*/
     }
 }
