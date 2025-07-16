@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.mod3.shared;
+package ru.yandex.practicum.bliushtein.mod3;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

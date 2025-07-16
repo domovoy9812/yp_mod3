@@ -34,8 +34,8 @@ public class SecurityConfiguration {
     ) throws Exception {
         return security
                 .authorizeHttpRequests(customizer)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
+                //.formLogin(AbstractHttpConfigurer::disable)
+                //.httpBasic(AbstractHttpConfigurer::disable)
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwtConfigurer -> {
                                     JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
