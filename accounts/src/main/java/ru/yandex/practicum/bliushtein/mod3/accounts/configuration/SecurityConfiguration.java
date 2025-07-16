@@ -12,6 +12,7 @@ public class SecurityConfiguration {
     public Customizer<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry> authorizeHttpRequestsCustomizer() {
         return authorizeRequests ->
                 authorizeRequests
+                        .requestMatchers("/account-service/user/authenticate/**").authenticated()
                         .anyRequest().permitAll();
     }
 }

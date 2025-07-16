@@ -16,12 +16,14 @@ spring:
             - Path=/account-service/**
           filters:
             - TokenRelay=gateway-client
+            - RemoveRequestHeader=JSESSIONID
         - id: notification
           uri: "lb://${notification-service-name}"
           predicates:
             - Path=/notification/**
           filters:
             - TokenRelay=gateway-client
+            - RemoveRequestHeader=JSESSIONID
   security:
     oauth2:
       client:

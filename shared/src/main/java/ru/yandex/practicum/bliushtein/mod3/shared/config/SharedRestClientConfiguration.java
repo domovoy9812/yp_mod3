@@ -17,11 +17,11 @@ import org.springframework.web.client.RestClient;
 @Configuration
 @Profile("!test")
 @ConditionalOnProperty("keycloak_client_id")
-public class RestClientConfiguration {
+public class SharedRestClientConfiguration {
     @Bean
     @LoadBalanced
     RestClient.Builder restClientBuilder(OAuth2AuthorizedClientManager authorizedClientManager,
-                                         @Value("keycloak_client_id") String clientId) {
+                                         @Value("${keycloak_client_id}") String clientId) {
         OAuth2ClientHttpRequestInterceptor interceptor = new OAuth2ClientHttpRequestInterceptor(authorizedClientManager);
         interceptor.setClientRegistrationIdResolver(request -> clientId);
         return RestClient.builder().requestInterceptor(interceptor);
