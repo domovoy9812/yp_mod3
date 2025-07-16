@@ -15,28 +15,15 @@ spring:
           predicates:
             - Path=/account-service/**
           filters:
-            - TokenRelay=gateway-client
+            - TokenRelay
             - RemoveRequestHeader=JSESSIONID
         - id: notification
           uri: "lb://${notification-service-name}"
           predicates:
             - Path=/notification/**
           filters:
-            - TokenRelay=gateway-client
+            - TokenRelay
             - RemoveRequestHeader=JSESSIONID
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token
-        registration:
-          gateway-client:
-            provider: keycloak
-            client-id: gateway_client_id
-            client-secret: 8jRYUyFquHKqenM8Edatj090NUE4ArIG
-            scope: accounts.read, accounts.write
-            authorization-grant-type: client_credentials
 management:
   endpoints:
     web:
