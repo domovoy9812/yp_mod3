@@ -30,7 +30,6 @@ public class SecurityConfiguration {
                 )
                 .logout(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/main/create").permitAll()
                         .requestMatchers("/main/**").authenticated()
                         .anyRequest().permitAll()
                 )
