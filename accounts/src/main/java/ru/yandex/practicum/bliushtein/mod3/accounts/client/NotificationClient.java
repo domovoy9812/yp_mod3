@@ -20,9 +20,9 @@ public class NotificationClient {
         this.configuration = configuration;
     }
 
-    public void sendNotification(String email, String message) {
+    public void sendNotification(String email, String subject, String message) {
         RestClient restClient = restClientBuilder.build();
-        CreateNotificationRequest request = new CreateNotificationRequest("accounts-application", email, message);
+        CreateNotificationRequest request = new CreateNotificationRequest("accounts-application", email, subject, message);
         restClient.post()
                 .uri("http://" + configuration.getGatewayServiceName() + "/notification")
                 .body(request)

@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.bliushtein.mod3.notification.data.entity.NotificationEntity;
 import ru.yandex.practicum.bliushtein.mod3.notification.data.repository.NotificationRepository;
 
-import java.time.ZonedDateTime;
-
 @Slf4j
 @Service
 public class NotificationService {
@@ -18,21 +16,8 @@ public class NotificationService {
     }
 
     @Transactional
-    public void createNotification(String source, String email, String message) {
-        NotificationEntity notificationEntity = notificationRepository.save(
-                new NotificationEntity(source, email, message));
-        sendNotification(notificationEntity);
+    public void createNotification(String source, String email, String subject, String message) {
+        notificationRepository.save(new NotificationEntity(source, email, subject, message, false, 0));
     }
 
-    public void sendNotification(NotificationEntity notification) {
-        try {
-            //TODO implement email send
-            log.debug("send email source:'{}' to:'{}' message:'{}'", notification.getSource(), notification.getEmail(),
-                    notification.getMessage());
-            notification.setSendDate(ZonedDateTime.now());
-            notificationRepository.save(notification);
-        } catch (Throwable throwable) {
-            log.error("Error during email send", throwable);
-        }
-    }
 }

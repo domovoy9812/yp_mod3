@@ -7,22 +7,26 @@ plugins {
 	id("org.springframework.cloud.contract")
 	id("maven-publish")
 }
+
+group = "ru.yandex.practicum.bliushtein"
+version = "0.0.1-SNAPSHOT"
+
 configure<ContractVerifierExtension> {
-	baseClassForTests.set("ru.yandex.practicum.bliushtein.mod3.template.contract.BaseContractTest")
+	baseClassForTests.set("ru.yandex.practicum.bliushtein.mod3.accounts.contract.BaseContractTest")
 }
 publishing {
 	publications {
 		create<MavenPublication>("mavenJava") {
 			from(components["java"])
+			artifact(file("${layout.buildDirectory.get()}/libs/${project.name}-${version}-stubs.jar")) {
+				classifier = "stubs"
+			}
 		}
 	}
 	repositories {
 		mavenLocal()
 	}
 }
-
-group = "ru.yandex.practicum.bliushtein"
-version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
@@ -66,7 +70,9 @@ dependencies {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
-
+tasks.named("publishMavenJavaPublicationToMavenLocal") {
+	dependsOn("verifierStubsJar")
+}
 tasks.named("build") {
 	dependsOn("publishToMavenLocal")
 }

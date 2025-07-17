@@ -9,7 +9,7 @@ spring:
 #        format: YAML
 #        data-key: data
   config:
-    import: consul:localhost:8500
+    import: optional:consul:localhost:8500
   security:
     oauth2:
       client:

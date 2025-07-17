@@ -13,10 +13,17 @@ Contract.make {
         body(
                 source: "accounts-application",
                 email: "test@dom.com",
+                subject: "subject",
                 message: "email message"
         )
     }
     response {
         status 200
+        headers {
+            contentType(applicationJson())
+        }
+        body(
+                successful: true
+        )
     }
 }

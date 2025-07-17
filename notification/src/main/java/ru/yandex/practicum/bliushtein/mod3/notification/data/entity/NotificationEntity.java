@@ -27,7 +27,19 @@ public class NotificationEntity {
 
     @Column(nullable = false)
     @NonNull
+    private String subject;
+
+    @Column(nullable = false)
+    @NonNull
     private String message;
+
+    @Column(nullable = false)
+    @NonNull
+    private boolean sent;
+
+    @Column(nullable = false)
+    @NonNull
+    private int retryCount;
 
     private ZonedDateTime sendDate;
 }

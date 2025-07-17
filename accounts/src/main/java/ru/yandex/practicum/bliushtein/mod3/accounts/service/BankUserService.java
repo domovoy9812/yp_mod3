@@ -33,15 +33,14 @@ public class BankUserService {
     }
 
     public BankUser findBankUser(String name) {
-        log.info("AccountService called for {}", name);
         BankUserEntity userEntity = userRepository.findByName(name);
         return userMapper.toDto(userEntity);
     }
 
     public BankUserWithPassword findBankUserToAuthenticate(String name) {
-        log.info("AccountService called for {}", name);
         BankUserEntity userEntity = userRepository.findByName(name);
-        notificationClient.sendNotification(userEntity.getEmail(), "Someone getting your credentials!");
+        notificationClient.sendNotification(userEntity.getEmail(), "Log in Notification",
+                "Someone getting your credentials!");
         return userMapper.toBankUserWithPasswordDto(userEntity);
     }
 
