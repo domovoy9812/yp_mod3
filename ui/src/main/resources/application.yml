@@ -23,6 +23,29 @@ spring:
             client-secret: 8jRYUyFquHKqenM8Edatj090NUE4ArIG
             scope: accounts.read, accounts.write
             authorization-grant-type: client_credentials
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallDurationThreshold: 3s
+        slowCallRateThreshold: 10
+        failureRateThreshold: 10
+        waitDurationInOpenState: 60s
+        minimumNumberOfCalls: 5
+    instances:
+      uiCircuitBreaker:
+        baseConfig: default
+  retry:
+    configs:
+      default:
+        failAfterMaxAttempts: true
+        maxAttempts: 3
+        waitDuration: 500ms
+        retryExceptions:
+          - java.lang.Exception
 management:
   endpoints:
     web:
@@ -38,4 +61,13 @@ management:
 logging:
   level:
     org:
-      springframework: DEBUG
+      springframework:
+        security: DEBUG
+    io:
+      github:
+        resilience4j: DEBUG
+    ru:
+      yandex:
+        practicum:
+          bliushtein:
+            mod3: DEBUG

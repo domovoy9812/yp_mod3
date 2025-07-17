@@ -1,11 +1,11 @@
 package ru.yandex.practicum.bliushtein.mod3.ui.service;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 import ru.yandex.practicum.bliushtein.mod3.shared.config.ExternalConfiguration;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
@@ -29,14 +29,18 @@ public class BankUserClient {
         this.passwordEncoder = passwordEncoder;
     }
 
+
+    @CircuitBreaker(name="uiCircuitBreaker", fallbackMethod = "accountsServiceIsUnreachableFallback")
     public BankUserWithPassword findUserByUsername(String name) {
         log.info("BankUserService executed for {}", name);
         return restClientBuilder.build().get()
                 .uri(GET_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name)
                 .retrieve()
                 .body(BankUserWithPassword.class);
-        /*return restTemplate.getForObject(GET_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()),
-                BankUserWithPassword.class, name);*/
+    }
+
+    public BankUserWithPassword accountsServiceIsUnreachableFallback(Throwable throwable) {
+        throw new RuntimeException("External system is unreachable", throwable);
     }
 
     public BankUser createUser(String name, String password, String firstName, String lastName, String email) {
@@ -46,8 +50,6 @@ public class BankUserClient {
                 .body(new CreateUserRequest(name, encodedPassword, firstName, lastName, email))
                 .retrieve()
                 .body(BankUser.class);
-        /*return restTemplate.postForObject(USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()),
-                , BankUser.class);*/
     }
 
     public void deleteUser(String name) {
@@ -55,6 +57,5 @@ public class BankUserClient {
                 .uri(DELETE_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name)
                 .retrieve()
                 .toBodilessEntity();
-        /*restTemplate.delete(DELETE_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name);*/
     }
 }
