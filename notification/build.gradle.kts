@@ -12,6 +12,11 @@ configure<ContractVerifierExtension> {
 }
 
 publishing {
+	publications {
+		create<MavenPublication>("mavenJava") {
+			from(components["java"])
+		}
+	}
 	repositories {
 		mavenLocal()
 	}
@@ -63,4 +68,8 @@ configurations.implementation {
 }
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.named("build") {
+	dependsOn("publishToMavenLocal")
 }

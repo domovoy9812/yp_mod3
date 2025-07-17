@@ -10,13 +10,14 @@ plugins {
 configure<ContractVerifierExtension> {
 	baseClassForTests.set("ru.yandex.practicum.bliushtein.mod3.accounts.contract.BaseContractTest")
 }
-
 publishing {
+	publications {
+		create<MavenPublication>("mavenJava") {
+			from(components["java"])
+		}
+	}
 	repositories {
 		mavenLocal()
-/*		flatDir {
-			dirs("C:/Users/Home/.m2/repository")
-		}*/
 	}
 }
 
@@ -64,4 +65,8 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.named("build") {
+	dependsOn("publishToMavenLocal")
 }

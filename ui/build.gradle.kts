@@ -28,12 +28,11 @@ configurations {
 		extendsFrom(configurations.testAnnotationProcessor.get())
 	}
 }
+
 repositories {
 	mavenCentral()
 	mavenLocal()
 }
-
-
 
 dependencies {
 	implementation(project(":shared"))
