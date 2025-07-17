@@ -1,7 +1,24 @@
+import org.springframework.cloud.contract.verifier.plugin.ContractVerifierExtension
+
 plugins {
 	java
-	id("org.springframework.boot") version "3.5.3"
-	id("io.spring.dependency-management") version "1.1.7"
+	id("org.springframework.boot")
+	id("io.spring.dependency-management")
+	id("org.springframework.cloud.contract")
+	id("maven-publish")
+}
+configure<ContractVerifierExtension> {
+	baseClassForTests.set("ru.yandex.practicum.bliushtein.mod3.template.contract.BaseContractTest")
+}
+publishing {
+	publications {
+		create<MavenPublication>("mavenJava") {
+			from(components["java"])
+		}
+	}
+	repositories {
+		mavenLocal()
+	}
 }
 
 group = "ru.yandex.practicum.bliushtein"
@@ -13,6 +30,12 @@ java {
 	}
 }
 
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+	}
+}
+
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
@@ -20,35 +43,30 @@ configurations {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 }
 
-extra["springCloudVersion"] = "2025.0.0"
-
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation(project(":shared"))
+	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.cloud:spring-cloud-starter-consul-config")
-	implementation("org.springframework.cloud:spring-cloud-starter-consul-discovery")
-	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-	compileOnly("org.projectlombok:lombok")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	runtimeOnly("org.postgresql:postgresql")
+	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.security:spring-security-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-	}
+	testImplementation(project(":shared-test"))
+	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.named("build") {
+	dependsOn("publishToMavenLocal")
 }

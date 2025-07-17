@@ -1,30 +1,56 @@
+#keycloak_client_id: ${keycloal_client_config}
 spring:
   application:
-    name: template-application
+    name: accounts-application
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: update
   cloud:
     consul:
-      host: localhost
-      port: 8500
-server:
-  port: ${SERVER_PORT:8080}
+      config:
+        enabled: true
+  config:
+    import: optional:consul:localhost:8500
+  security:
+    oauth2:
+      client:
+        registration:
+          ${keycloal_client_config}:
+            provider: keycloak
+            client-id: ${keycloal_client_id}
+            client-secret: ${keycloal_secret}
+            authorization-grant-type: client_credentials
+            scope: notification.write
+        provider:
+          keycloak:
+            token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/certs
+#server:
+#  port: ${port}
 management:
   endpoints:
     web:
       exposure:
         include: health, info
   endpoint:
+    info:
+      show-details: always
     health:
       show-details: always
-  liquibase:
-    url: ${SPRING_DATASOURCE_URL}
-    user: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    change-log: classpath:/db/changelog/db.changelog-master.yaml
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: '*'
+          show-details: always
+logging:
+  level:
+    org:
+      springframework: TRACE
