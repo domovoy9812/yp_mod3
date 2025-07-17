@@ -1,7 +1,7 @@
-#keycloak_client_id: ${keycloal_client_config}
+keycloak_client_id: blocker
 spring:
   application:
-    name: accounts-application
+    name: blocker-application
   datasource:
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -20,10 +20,10 @@ spring:
     oauth2:
       client:
         registration:
-          ${keycloal_client_config}:
+          blocker:
             provider: keycloak
-            client-id: ${keycloal_client_id}
-            client-secret: ${keycloal_secret}
+            client-id: blocker_client_id
+            client-secret: HK2ARBjUKmozdGNozC2qjn7TKTml0i75
             authorization-grant-type: client_credentials
             scope: notification.write
         provider:
@@ -32,8 +32,23 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/certs
-#server:
-#  port: ${port}
+server:
+  port: 8085
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallDurationThreshold: 3s
+        slowCallRateThreshold: 10
+        failureRateThreshold: 10
+        waitDurationInOpenState: 60s
+        minimumNumberOfCalls: 5
+    instances:
+      blockerCircuitBreaker:
+        baseConfig: default
 management:
   endpoints:
     web:

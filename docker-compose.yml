@@ -56,6 +56,40 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+  blocker:
+    build:
+      context: blocker
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+      - "8185:8185"
+    environment:
+      SPRING_CONFIG_IMPORT: consul:consul:8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-blocker:5436/blocker_db
+      SPRING_DATASOURCE_USERNAME: blocker_user
+      SPRING_DATASOURCE_PASSWORD: 12345
+    depends_on:
+      - consul
+      - postgresql-blocker
+      - keycloak
+  postgresql-blocker:
+    image: "postgres:17"
+    environment:
+      POSTGRES_DB: blocker_db
+      POSTGRES_USER: blocker_user
+      POSTGRES_PASSWORD: 12345
+      PGPORT: 5436
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5436:5436"
+    volumes:
+      - ./blocker/pgdata:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
   notification:
     build:
       context: notification

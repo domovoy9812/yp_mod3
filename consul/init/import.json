@@ -20,6 +20,11 @@
     "value": "YWNjb3VudHMtYXBwbGljYXRpb24="
   },
   {
+    "key": "config/application/blocker-service-name",
+    "flags": 0,
+    "value": "YmxvY2tlci1hcHBsaWNhdGlvbg=="
+  },
+  {
     "key": "config/application/gateway-service-name",
     "flags": 0,
     "value": "Z2F0ZXdheS1hcHBsaWNhdGlvbg=="
@@ -38,6 +43,11 @@
     "key": "config/application/ui-service-name",
     "flags": 0,
     "value": "dWktYXBwbGljYXRpb24="
+  },
+  {
+    "key": "config/blocker-application/server.port",
+    "flags": 0,
+    "value": "ODA4NQ=="
   },
   {
     "key": "config/notification-application/",

@@ -41,7 +41,11 @@ management:
 logging:
   level:
     org:
-      springframework: TRACE
+      springframework:
+        security: DEBUG
+    io:
+      github:
+        resilience4j: DEBUG
     ru:
       yandex:
         practicum:
