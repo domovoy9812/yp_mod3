@@ -5,7 +5,7 @@ import org.springframework.cloud.contract.spec.Contract
 Contract.make {
     description "описание"
     request {
-        method GET()
+        method POST()
         headers {
             contentType(applicationJson())
         }

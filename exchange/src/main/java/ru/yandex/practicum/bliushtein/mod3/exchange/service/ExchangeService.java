@@ -58,4 +58,8 @@ public class ExchangeService {
             }
         });
     }
+
+    public Map<String, Float> getExchangeRates() {
+        return exchangeRates;
+    }
 }

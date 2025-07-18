@@ -25,6 +25,11 @@
     "value": "YmxvY2tlci1hcHBsaWNhdGlvbg=="
   },
   {
+    "key": "config/application/exchange-generator-service-name",
+    "flags": 0,
+    "value": "ZXhjaGFuZ2UtZ2VuZXJhdG9yLWFwcGxpY2F0aW9u"
+  },
+  {
     "key": "config/application/exchange-service-name",
     "flags": 0,
     "value": "ZXhjaGFuZ2UtYXBwbGljYXRpb24="
@@ -63,6 +68,11 @@
     "key": "config/exchange-application/server.port",
     "flags": 0,
     "value": "ODA4Nw=="
+  },
+  {
+    "key": "config/exchange-generator-application/server.port",
+    "flags": 0,
+    "value": "ODA4OA=="
   },
   {
     "key": "config/notification-application/",

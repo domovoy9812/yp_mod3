@@ -1,0 +1,61 @@
+keycloak_client_id: exchange-generator
+spring:
+  application:
+    name: exchange-generator-application
+  cloud:
+    consul:
+      config:
+        enabled: true
+  config:
+    import: optional:consul:localhost:8500
+  security:
+    oauth2:
+      client:
+        registration:
+          exchange-generator:
+            provider: keycloak
+            client-id: exchange_generator_client_id
+            client-secret: 2MCmXhD09s1CKGzj1il0jhCl8zJ3JPpf
+            authorization-grant-type: client_credentials
+            scope: exchange.write
+        provider:
+          keycloak:
+            token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token
+resilience4j:
+  retry:
+    configs:
+      default:
+        failAfterMaxAttempts: true
+        maxAttempts: 3
+        waitDuration: 500ms
+        retryExceptions:
+          - java.lang.Exception
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    info:
+      show-details: always
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: '*'
+          show-details: always
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    io:
+      github:
+        resilience4j: DEBUG
+    ru:
+      yandex:
+        practicum:
+          bliushtein:
+            mod3: DEBUG

@@ -3,6 +3,7 @@ package ru.yandex.practicum.bliushtein.mod3.transfer;
 public class TransferException extends RuntimeException {
     public static final String SOURCE_USER_IS_NOT_FOUND_ERROR_MESSAGE = "Source user is not found. user='%s'";
     public static final String BLOCKER_VALIDATION_FAILED_ERROR_MESSAGE = "Blocker validation failed. Error message='%s'";
+    public static final String EXCHANGE_FAILED_ERROR_MESSAGE = "Exchange failed. Error message='%s'";
 
     public TransferException(String message) {
         super(message);
@@ -14,5 +15,9 @@ public class TransferException extends RuntimeException {
 
     public static TransferException blockerValidationFailed(String message) {
         return new TransferException(BLOCKER_VALIDATION_FAILED_ERROR_MESSAGE.formatted(message));
+    }
+
+    public static TransferException exchangeFailed(String errorMessage) {
+        return new TransferException(EXCHANGE_FAILED_ERROR_MESSAGE.formatted(errorMessage));
     }
 }

@@ -10,6 +10,8 @@ import ru.yandex.practicum.bliushtein.mod3.shared.dto.exchange.ExchangeResponse;
 import ru.yandex.practicum.bliushtein.mod3.exchange.service.ExchangeService;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.exchange.UpdateExchangeRatesRequest;
 
+import java.util.Map;
+
 @Slf4j
 @RequestMapping("/exchange")
 @RestController
@@ -19,11 +21,18 @@ public class ExchangeController {
     public ExchangeController(@Autowired ExchangeService exchangeService) {
         this.exchangeService = exchangeService;
     }
-    @GetMapping
+
+    @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_exchange.read')")
     public ExchangeResponse exchange(@RequestBody ExchangeRequest request) {
         return ExchangeResponse.ok(exchangeService.exchange(request.sourceCurrency(), request.targetCurrency(),
                 request.amount()));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('SCOPE_exchange.read')")
+    public Map<String, Float> getExchangeRates() {
+        return exchangeService.getExchangeRates();
     }
 
     @PutMapping
