@@ -102,6 +102,18 @@ services:
     depends_on:
       - consul
       - keycloak
+  exchange:
+    build:
+      context: exchange
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+      - "8187:8187"
+    environment:
+      SPRING_CONFIG_IMPORT: consul:consul:8500
+    depends_on:
+      - consul
+      - keycloak
   notification:
     build:
       context: notification

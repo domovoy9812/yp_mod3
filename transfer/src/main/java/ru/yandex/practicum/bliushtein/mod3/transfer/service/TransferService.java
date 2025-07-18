@@ -11,7 +11,7 @@ import ru.yandex.practicum.bliushtein.mod3.shared.dto.transfer.TransferRequest;
 import ru.yandex.practicum.bliushtein.mod3.transfer.client.AccountsClient;
 import ru.yandex.practicum.bliushtein.mod3.transfer.client.BlockerClient;
 import ru.yandex.practicum.bliushtein.mod3.transfer.client.NotificationClient;
-import ru.yandex.practicum.bliushtein.mod3.transfer.TransferValidationException;
+import ru.yandex.practicum.bliushtein.mod3.transfer.TransferException;
 
 import java.util.Objects;
 
@@ -39,14 +39,14 @@ public class TransferService {
         targetAmount = request.sourceAmount();
         BankUserResponse response = accountsClient.findBankUser(request.source());
         if (!response.isSuccessful()) {
-            throw TransferValidationException.sourceUserNotFound(request.source());
+            throw TransferException.sourceUserNotFound(request.source());
         }
         String email = response.getBankUser().email();
         GenericResponse validationResult = blockerClient.validate(request.source(), request.target(),
                 request.sourceAmount(), email);
         if (!validationResult.isSuccessful()) {
             notificationClient.sendFailNotification(email, request, validationResult.getErrorMessage());
-            throw TransferValidationException.blockerValidationFailed(request.source());
+            throw TransferException.blockerValidationFailed(request.source());
         }
         notificationClient.sendSuccessNotification(email, request);
         return accountsClient.transfer(request.source(), request.sourceCurrency(),

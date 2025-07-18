@@ -38,6 +38,13 @@ spring:
           filters:
             - TokenRelay
             - RemoveRequestHeader=JSESSIONID
+        - id: exchange
+          uri: "lb://${exchange-service-name}"
+          predicates:
+            - Path=/exchange/**
+          filters:
+            - TokenRelay
+            - RemoveRequestHeader=JSESSIONID
 management:
   endpoints:
     web:
