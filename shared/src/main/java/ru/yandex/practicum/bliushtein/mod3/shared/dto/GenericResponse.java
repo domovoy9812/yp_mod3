@@ -5,6 +5,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class GenericResponse {
     private boolean successful;
     private String errorMessage;

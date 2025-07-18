@@ -1,0 +1,70 @@
+keycloak_client_id: transfer
+spring:
+  application:
+    name: transfer-application
+  cloud:
+    consul:
+      config:
+        enabled: true
+  config:
+    import: optional:consul:localhost:8500
+  security:
+    oauth2:
+      client:
+        registration:
+          transfer:
+            provider: keycloak
+            client-id: transfer_client_id
+            client-secret: NS9Gg8ub1JykTzzMAK9JabYmUTKyLEvm
+            authorization-grant-type: client_credentials
+            scope: notification.write, blocker.read, blocker.write
+        provider:
+          keycloak:
+            token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/certs
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        slowCallDurationThreshold: 3s
+        slowCallRateThreshold: 10
+        failureRateThreshold: 10
+        waitDurationInOpenState: 60s
+        minimumNumberOfCalls: 5
+    instances:
+      notificationsCircuitBreaker:
+        baseConfig: default
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    info:
+      show-details: always
+    health:
+      show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: '*'
+          show-details: always
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    io:
+      github:
+        resilience4j: DEBUG
+    ru:
+      yandex:
+        practicum:
+          bliushtein:
+            mod3: DEBUG

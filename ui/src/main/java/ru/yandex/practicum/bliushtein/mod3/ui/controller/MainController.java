@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.bliushtein.mod3.ui.service.BankUserClient;
+import ru.yandex.practicum.bliushtein.mod3.ui.client.BankUserClient;
 
 @Slf4j
 @RestController

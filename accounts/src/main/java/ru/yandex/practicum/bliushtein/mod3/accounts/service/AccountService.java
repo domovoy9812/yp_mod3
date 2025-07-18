@@ -11,8 +11,11 @@ import ru.yandex.practicum.bliushtein.mod3.accounts.data.repository.AccountRepos
 import ru.yandex.practicum.bliushtein.mod3.accounts.data.repository.BankUserRepository;
 import ru.yandex.practicum.bliushtein.mod3.accounts.mapper.AccountMapper;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.Account;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.AccountsTransferRequest;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.AccountsTransferResponse;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -89,4 +92,32 @@ public class AccountService {
         }
     }
 
+    @Transactional
+    public AccountsTransferResponse transfer(String user, String currency, AccountsTransferRequest request)
+            throws AccountServiceException {
+        if (Objects.equals(user, request.targetUser()) && Objects.equals(currency, request.targetCurrency())) {
+            throw AccountServiceException.accountsShouldBeDifferent(user, currency);
+        }
+        AccountEntity sourceAccountEntity = getAccountForTransfer(user, currency, -request.amount());
+        AccountEntity targetAccountEntity = getAccountForTransfer(request.targetUser(), request.targetCurrency(),
+                request.targetAmount());
+        sourceAccountEntity.setBalance(sourceAccountEntity.getBalance() - request.amount());
+        targetAccountEntity.setBalance(targetAccountEntity.getBalance() + request.targetAmount());
+        sourceAccountEntity = accountRepository.save(sourceAccountEntity);
+        targetAccountEntity = accountRepository.save(targetAccountEntity);
+        return AccountsTransferResponse.ok(accountMapper.toDto(sourceAccountEntity), accountMapper.toDto(targetAccountEntity));
+    }
+
+    private AccountEntity getAccountForTransfer(String user, String currency, int change)
+            throws AccountServiceException {
+        BankUserEntity userEntity = userRepository.findByName(user);
+        AccountEntity accountEntity = accountRepository.findByUserAndCurrency(userEntity, currency);
+        if (accountEntity == null) {
+            throw AccountServiceException.accountNotFound(user, currency);
+        }
+        if (accountEntity.getBalance() + change < 0) {
+            throw AccountServiceException.notEnoughMoney(user, currency, change);
+        }
+        return accountEntity;
+    }
 }

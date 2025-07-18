@@ -7,7 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bliushtein.mod3.accounts.AccountServiceException;
 import ru.yandex.practicum.bliushtein.mod3.accounts.service.BankUserService;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.GenericResponse;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.CreateUserRequest;
 
@@ -23,8 +24,8 @@ public class BankUserController {
 
     @GetMapping("/{name}")
     @PreAuthorize("hasAuthority('SCOPE_accounts.read')")
-    public BankUser findBankUserByName(@PathVariable String name) {
-        return bankUserService.findBankUser(name);
+    public BankUserResponse findBankUserByName(@PathVariable String name) {
+        return BankUserResponse.ok(bankUserService.findBankUser(name));
     }
 
     @GetMapping("/authenticate/{name}")
@@ -35,20 +36,21 @@ public class BankUserController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('SCOPE_accounts.write')")
-    public BankUser createBankUser(@RequestBody CreateUserRequest request) {
-        return bankUserService.createBankUser(request.name(), request.password(), request.firstName(),
-                request.lastName(), request.email());
+    public BankUserResponse createBankUser(@RequestBody CreateUserRequest request) {
+        return BankUserResponse.ok(bankUserService.createBankUser(request.name(), request.password(), request.firstName(),
+                request.lastName(), request.email()));
     }
 
     @DeleteMapping("/{name}")
     @PreAuthorize("hasAuthority('SCOPE_accounts.write')")
-    public void deleteBankUser(@PathVariable String name) throws AccountServiceException {
+    public GenericResponse deleteBankUser(@PathVariable String name) throws AccountServiceException {
         bankUserService.deleteBankUser(name);
+        return GenericResponse.ok();
     }
 
     @ExceptionHandler
-    public void handleException(Throwable exception) throws Throwable {
-        log.error("-----exception in BankUserController: " + exception.getMessage(), exception);
-        throw exception;
+    public GenericResponse handleException(Throwable exception) throws Throwable {
+        log.error("exception in BankUserController.", exception);
+        return GenericResponse.fail(exception.getMessage());
     }
 }

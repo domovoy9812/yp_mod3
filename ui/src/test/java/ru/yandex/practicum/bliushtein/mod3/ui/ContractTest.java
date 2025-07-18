@@ -36,7 +36,7 @@ public class ContractTest {
     @Test
     @WithMockUser(username = "user1")
     void test() {
-        URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/main/create")
+        URI uri = UriComponentsBuilder.fromUriString("http://localhost:" + port + "/main/create")
                 .queryParam("name", "{name}")
                 .queryParam("password", "{password}")
                 .queryParam("firstName", "{firstName}")
@@ -44,6 +44,6 @@ public class ContractTest {
                 .queryParam("email", "{email}")
                 .build("user1", "12345", "first name", "last name", "test@dom.com");
         String response = restTemplate.getForObject(uri, String.class);
-        assertEquals("BankUser[name=user1, firstName=first name, lastName=last name, email=test@dom.com]", response);
+        assertEquals("BankUserResponse(super=GenericResponse(successful=true, errorMessage=null), bankUser=BankUser[name=user1, firstName=first name, lastName=last name, email=test@dom.com])", response);
     }
 }

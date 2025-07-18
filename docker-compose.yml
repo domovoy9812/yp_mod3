@@ -90,6 +90,18 @@ services:
       timeout: 60s
       retries: 5
       start_period: 80s
+  transfer:
+    build:
+      context: transfer
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+      - "8186:8186"
+    environment:
+      SPRING_CONFIG_IMPORT: consul:consul:8500
+    depends_on:
+      - consul
+      - keycloak
   notification:
     build:
       context: notification

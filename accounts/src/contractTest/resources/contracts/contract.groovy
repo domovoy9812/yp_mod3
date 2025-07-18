@@ -23,11 +23,15 @@ Contract.make {
         headers {
             contentType(applicationJson())
         }
-        body(
-                name: "user1",
-                firstName: "first name",
-                lastName: "last name",
-                email: "test@dom.com"
+        body([
+                successful: true,
+                bankUser  : [
+                        "name"     : "user1",
+                        "firstName": "first name",
+                        "lastName" : "last name",
+                        "email"    : "test@dom.com"
+                ]
+        ]
         )
     }
 }

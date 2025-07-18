@@ -1,4 +1,4 @@
-package ru.yandex.practicum.bliushtein.mod3.ui.service;
+package ru.yandex.practicum.bliushtein.mod3.ui.client;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import ru.yandex.practicum.bliushtein.mod3.shared.config.ExternalConfiguration;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.CreateUserRequest;
 
@@ -43,13 +43,13 @@ public class BankUserClient {
         throw new RuntimeException("External system is unreachable", throwable);
     }
 
-    public BankUser createUser(String name, String password, String firstName, String lastName, String email) {
+    public BankUserResponse createUser(String name, String password, String firstName, String lastName, String email) {
         String encodedPassword = passwordEncoder.encode(password);
         return restClientBuilder.build().post()
                 .uri(USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()))
                 .body(new CreateUserRequest(name, encodedPassword, firstName, lastName, email))
                 .retrieve()
-                .body(BankUser.class);
+                .body(BankUserResponse.class);
     }
 
     public void deleteUser(String name) {

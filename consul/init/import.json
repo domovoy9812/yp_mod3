@@ -40,6 +40,11 @@
     "value": "bm90aWZpY2F0aW9uLWFwcGxpY2F0aW9u"
   },
   {
+    "key": "config/application/transfer-service-name",
+    "flags": 0,
+    "value": "dHJhbnNmZXItYXBwbGljYXRpb24="
+  },
+  {
     "key": "config/application/ui-service-name",
     "flags": 0,
     "value": "dWktYXBwbGljYXRpb24="
@@ -58,6 +63,11 @@
     "key": "config/notification-application/server.port",
     "flags": 0,
     "value": "ODA4Mw=="
+  },
+  {
+    "key": "config/transfer-application/server.port",
+    "flags": 0,
+    "value": "ODA4Ng=="
   },
   {
     "key": "config/ui-application/",

@@ -31,6 +31,13 @@ spring:
           filters:
             - TokenRelay
             - RemoveRequestHeader=JSESSIONID
+        - id: transfer
+          uri: "lb://${transfer-service-name}"
+          predicates:
+            - Path=/transfer/**
+          filters:
+            - TokenRelay
+            - RemoveRequestHeader=JSESSIONID
 management:
   endpoints:
     web:

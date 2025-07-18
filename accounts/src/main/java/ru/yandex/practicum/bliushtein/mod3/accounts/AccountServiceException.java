@@ -15,6 +15,9 @@ public class AccountServiceException extends Exception {
     private static final String NOT_ENOUGH_MONEY_ERROR_MESSAGE
             = "Not enough money for user = '%s' and currency= '%s' for change = '%d'";
 
+    private static final String ACCOUNTS_SHOULD_BE_DIFFERENT_ERROR_MESSAGE
+            = "Can't transfer money. Accounts should be different. user = '%s' and currency= '%s'";
+
     public AccountServiceException(String message) {
         super(message);
     }
@@ -37,5 +40,9 @@ public class AccountServiceException extends Exception {
 
     public static AccountServiceException cantDeleteAccountWithNonZeroBalance(String user, String currency) {
         return new AccountServiceException(BALANCE_IS_NOT_0_ERROR_MESSAGE.formatted(user, currency));
+    }
+
+    public static AccountServiceException accountsShouldBeDifferent(String user, String currency) {
+        return new AccountServiceException(ACCOUNTS_SHOULD_BE_DIFFERENT_ERROR_MESSAGE.formatted(user, currency));
     }
 }
