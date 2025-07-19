@@ -9,7 +9,7 @@ Contract.make {
         headers {
             contentType(applicationJson())
         }
-        url ("/transfer")
+        url("/transfer")
         body(
                 "source": "user1",
                 "sourceCurrency": "RUR",
@@ -23,8 +23,17 @@ Contract.make {
         headers {
             contentType(applicationJson())
         }
-        /*body(
-                param: "value"
-        )*/
+        body([
+                successful: true,
+                from   : [
+                        currency: "RUR",
+                        balance : 50
+                ],
+                to     : [
+                        currency: "RUR",
+                        balance : 50
+                ]
+        ]
+        )
     }
 }

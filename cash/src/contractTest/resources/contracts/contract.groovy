@@ -21,9 +21,13 @@ Contract.make {
         headers {
             contentType(applicationJson())
         }
-        /*body(
+        body([
                 successful: true,
-                amount: 1
-        )*/
+                account: [
+                        currency: "USD",
+                        balance: 20
+                ]
+             ]
+        )
     }
 }
