@@ -36,6 +36,7 @@ public class ExchangeController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('SCOPE_exchange.write')")
     public GenericResponse updateExchangeRates(@RequestBody UpdateExchangeRatesRequest request) {
         exchangeService.updateExchangeRates(request.exchangeRates());
         return GenericResponse.ok();

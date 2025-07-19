@@ -17,7 +17,7 @@ spring:
             client-id: transfer_client_id
             client-secret: NS9Gg8ub1JykTzzMAK9JabYmUTKyLEvm
             authorization-grant-type: client_credentials
-            scope: notification.write, blocker.read, blocker.write
+            scope: notification.write, blocker.write, accounts.read, accounts.write, exchange.read
         provider:
           keycloak:
             token-uri: ${keycloak_url:http://localhost:8084/realms/bank}/protocol/openid-connect/token

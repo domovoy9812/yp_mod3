@@ -64,9 +64,6 @@ dependencies {
 	testImplementation(project(":shared-test"))
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-verifier")
 }
-configurations.implementation {
-	exclude(group = "org.springframework.boot", module = "spring-boot-starter-oauth2-client")
-}
 
 tasks.withType<Test> {
 	useJUnitPlatform()
