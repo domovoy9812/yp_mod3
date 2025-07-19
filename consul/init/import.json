@@ -25,6 +25,11 @@
     "value": "YmxvY2tlci1hcHBsaWNhdGlvbg=="
   },
   {
+    "key": "config/application/cash-service-name",
+    "flags": 0,
+    "value": "Y2FzaC1hcHBsaWNhdGlvbg=="
+  },
+  {
     "key": "config/application/exchange-generator-service-name",
     "flags": 0,
     "value": "ZXhjaGFuZ2UtZ2VuZXJhdG9yLWFwcGxpY2F0aW9u"
@@ -63,6 +68,11 @@
     "key": "config/blocker-application/server.port",
     "flags": 0,
     "value": "ODA4NQ=="
+  },
+  {
+    "key": "config/cash-application/server.port",
+    "flags": 0,
+    "value": "ODA4OQ=="
   },
   {
     "key": "config/exchange-application/server.port",

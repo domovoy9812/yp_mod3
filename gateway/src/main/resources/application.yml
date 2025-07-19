@@ -38,6 +38,13 @@ spring:
           filters:
             - TokenRelay
             - RemoveRequestHeader=JSESSIONID
+        - id: cash
+          uri: "lb://${cash-service-name}"
+          predicates:
+            - Path=/cash/**
+          filters:
+            - TokenRelay
+            - RemoveRequestHeader=JSESSIONID
         - id: exchange
           uri: "lb://${exchange-service-name}"
           predicates:
