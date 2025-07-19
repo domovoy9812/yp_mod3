@@ -13,6 +13,7 @@ import ru.yandex.practicum.bliushtein.mod3.accounts.mapper.BankUserMapper;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Slf4j
@@ -44,8 +45,9 @@ public class BankUserService {
         return userMapper.toBankUserWithPasswordDto(userEntity);
     }
 
-    public BankUser createBankUser(String name, String password, String firstName, String lastName, String email) {
-        BankUserEntity userEntity = new BankUserEntity(name, password, firstName, lastName, email);
+    public BankUser createBankUser(String name, String password, String firstName, String lastName,
+                                   ZonedDateTime birthdate, String email) {
+        BankUserEntity userEntity = new BankUserEntity(name, password, firstName, lastName, birthdate, email);
         BankUserEntity savedUserEntity = userRepository.save(userEntity);
         return userMapper.toDto(savedUserEntity);
     }

@@ -18,6 +18,8 @@ import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.AccountResponse;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
 
+import java.time.ZonedDateTime;
+
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -37,7 +39,7 @@ public class BaseContractTest {
     @BeforeEach
     public void setup() {
         when(accountsClientMock.findBankUser("user1")).thenReturn(
-                BankUserResponse.ok(new BankUser("user1", "first", "last", "email@dom.com"))
+                BankUserResponse.ok(new BankUser("user1", "first", "last", ZonedDateTime.now(), "email@dom.com"))
         );
         when(accountsClientMock.changeAccountBalance("user1", "USD", -80)).thenReturn(
                 AccountResponse.ok(new Account("USD", 20))

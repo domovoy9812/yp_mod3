@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bliushtein.mod3.accounts.AccountServiceException;
 import ru.yandex.practicum.bliushtein.mod3.accounts.service.BankUserService;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.GenericResponse;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.CreateUserRequest;
@@ -25,7 +26,8 @@ public class BankUserController {
     @GetMapping("/{name}")
     @PreAuthorize("hasAuthority('SCOPE_accounts.read')")
     public BankUserResponse findBankUserByName(@PathVariable String name) {
-        return BankUserResponse.ok(bankUserService.findBankUser(name));
+        BankUser bankUser = bankUserService.findBankUser(name);
+        return bankUser == null ? BankUserResponse.fail("User is not found") : BankUserResponse.ok(bankUser);
     }
 
     @GetMapping("/authenticate/{name}")
@@ -38,7 +40,7 @@ public class BankUserController {
     @PreAuthorize("hasAuthority('SCOPE_accounts.write')")
     public BankUserResponse createBankUser(@RequestBody CreateUserRequest request) {
         return BankUserResponse.ok(bankUserService.createBankUser(request.name(), request.password(), request.firstName(),
-                request.lastName(), request.email()));
+                request.lastName(), request.birthdate(), request.email()));
     }
 
     @DeleteMapping("/{name}")

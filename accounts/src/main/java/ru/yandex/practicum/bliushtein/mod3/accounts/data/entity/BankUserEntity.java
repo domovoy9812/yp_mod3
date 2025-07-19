@@ -3,6 +3,8 @@ package ru.yandex.practicum.bliushtein.mod3.accounts.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.ZonedDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,9 +16,6 @@ public class BankUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    //List<AccountEntity> accounts;
 
     @Column(nullable = false, unique = true)
     @NonNull
@@ -33,6 +32,10 @@ public class BankUserEntity {
     @Column(nullable = false)
     @NonNull
     private String lastName;
+
+    @Column(nullable = false)
+    @NonNull
+    ZonedDateTime birthdate;
 
     @Column(nullable = false)
     @NonNull

@@ -15,6 +15,7 @@ Contract.make {
                 password: "12345",
                 firstName: "first name",
                 lastName: "last name",
+                birthdate: "2000-01-01T00:00Z[GMT]",
                 email: "test@dom.com"
         )
     }

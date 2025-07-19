@@ -3,17 +3,18 @@ package ru.yandex.practicum.bliushtein.mod3.ui.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.bliushtein.mod3.ui.client.BankUserClient;
+import ru.yandex.practicum.bliushtein.mod3.ui.client.AccountsClient;
 
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/main")
 public class MainController {
-    private final BankUserClient bankUserClient;
+    private final AccountsClient accountsClient;
 
-    public MainController(@Autowired BankUserClient bankUserClient) {
-        this.bankUserClient = bankUserClient;
+    public MainController(@Autowired AccountsClient accountsClient) {
+        this.accountsClient = accountsClient;
     }
 
     @GetMapping
@@ -22,20 +23,9 @@ public class MainController {
         return "The main page stub. Current User:%s. isAuthenticated=%s".formatted(authentication.getName(), authentication.isAuthenticated());
     }
 
-    @GetMapping("/create")
-    public String createUser(@RequestParam String name,
-                             @RequestParam String password,
-                             @RequestParam String firstName,
-                             @RequestParam String lastName,
-                             @RequestParam String email) {
-        log.debug("calling bankUserClient.createUser with name='{}', password='{}', firstName='{}', lastName='{}', email='{}'",
-                name, password, firstName, lastName, email);
-        return bankUserClient.createUser(name, password, firstName, lastName, email).toString();
-    }
-
     @GetMapping("/delete")
     String deleteUser(@RequestParam String name) {
-        bankUserClient.deleteUser(name);
+        accountsClient.deleteUser(name);
         return "user deleted";
     }
 }

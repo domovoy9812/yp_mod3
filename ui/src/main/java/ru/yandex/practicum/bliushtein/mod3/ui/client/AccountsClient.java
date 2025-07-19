@@ -11,9 +11,11 @@ import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.CreateUserRequest;
 
+import java.time.ZonedDateTime;
+
 @Slf4j
 @Component
-public class BankUserClient {
+public class AccountsClient {
     private final static String GET_USER_URL_TEMPLATE = "http://%s/account-service/user/authenticate/{name}";
     private final static String USER_URL_TEMPLATE = "http://%s/account-service/user";
     private final static String DELETE_USER_URL_TEMPLATE = "http://%s/account-service/user/{name}";
@@ -21,7 +23,7 @@ public class BankUserClient {
     private final ExternalConfiguration extConfig;
     private final RestClient.Builder restClientBuilder;
     private final PasswordEncoder passwordEncoder;
-    public BankUserClient(@Autowired ExternalConfiguration extConfig,
+    public AccountsClient(@Autowired ExternalConfiguration extConfig,
                           @Autowired RestClient.Builder restClientBuilder,
                           @Autowired PasswordEncoder passwordEncoder) {
         this.extConfig = extConfig;
@@ -30,7 +32,7 @@ public class BankUserClient {
     }
 
 
-    @CircuitBreaker(name="uiCircuitBreaker", fallbackMethod = "accountsServiceIsUnreachableFallback")
+    @CircuitBreaker(name="accountsCircuitBreaker", fallbackMethod = "accountsServiceIsUnreachableFallback")
     public BankUserWithPassword findUserByUsername(String name) {
         log.info("BankUserService executed for {}", name);
         return restClientBuilder.build().get()
@@ -43,11 +45,12 @@ public class BankUserClient {
         throw new RuntimeException("External system is unreachable", throwable);
     }
 
-    public BankUserResponse createUser(String name, String password, String firstName, String lastName, String email) {
+    public BankUserResponse createUser(String name, String password, String firstName, String lastName,
+                                       ZonedDateTime birthdate, String email) {
         String encodedPassword = passwordEncoder.encode(password);
         return restClientBuilder.build().post()
                 .uri(USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()))
-                .body(new CreateUserRequest(name, encodedPassword, firstName, lastName, email))
+                .body(new CreateUserRequest(name, encodedPassword, firstName, lastName, birthdate, email))
                 .retrieve()
                 .body(BankUserResponse.class);
     }

@@ -1,7 +1,6 @@
 package ru.yandex.practicum.bliushtein.mod3.ui;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -33,7 +32,7 @@ public class ContractTest {
     @LocalServerPort
     int port;
 
-    @Test
+    //@Test
     @WithMockUser(username = "user1")
     void test() {
         URI uri = UriComponentsBuilder.fromUriString("http://localhost:" + port + "/main/create")
