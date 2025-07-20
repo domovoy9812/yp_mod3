@@ -43,7 +43,8 @@ public class MainController {
     @GetMapping("/rates")
     @ResponseBody
     public List<ExchangeRate> getRates() {
-        return List.of(new ExchangeRate("USD", 0.1f), new ExchangeRate("CNY", 5f));
+        return operationsService.getExchangeRates();
+        //return List.of(new ExchangeRate("USD", 0.1f), new ExchangeRate("CNY", 5f));
     }
 
     @PostMapping("/change-password")

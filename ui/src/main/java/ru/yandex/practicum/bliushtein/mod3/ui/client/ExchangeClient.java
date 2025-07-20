@@ -2,9 +2,12 @@ package ru.yandex.practicum.bliushtein.mod3.ui.client;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import ru.yandex.practicum.bliushtein.mod3.shared.config.ExternalConfiguration;
+
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -18,19 +21,12 @@ public class ExchangeClient {
         this.configuration = configuration;
     }
 
-/*    public int exchange(String sourceCurrency, String targetCurrency, int amount) {
+    public Map<String, Float> getExchangeRates() {
         RestClient restClient = restClientBuilder.build();
-        ExchangeResponse response = restClient.post()
+        return restClient.get()
                 .uri("http://" + configuration.getGatewayServiceName() + "/exchange")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ExchangeRequest(sourceCurrency, targetCurrency, amount))
                 .retrieve()
-                .body(ExchangeResponse.class);
-        if (response.isSuccessful()) {
-            return response.getAmount();
-        } else {
-            throw TransferException.exchangeFailed(response.getErrorMessage());
-        }
-    }*/
+                .body(new ParameterizedTypeReference<Map<String, Float>>() {});
+    }
 
 }
