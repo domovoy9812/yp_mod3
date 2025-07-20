@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.yandex.practicum.bliushtein.mod3.ui.service.AuthorizationService;
+import ru.yandex.practicum.bliushtein.mod3.ui.service.AuthenticationService;
 
 @Configuration
 @Profile("!test")
@@ -22,19 +22,20 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity security,
-                                            @Autowired AuthorizationService authorizationService) throws Exception {
+                                            @Autowired AuthenticationService authenticationService) throws Exception {
         return security
-                .formLogin(customizer -> customizer
+                /*.formLogin(customizer -> customizer
                         .successForwardUrl("/main")
                         .failureUrl("/error")
-                )
+                )*/
+                .formLogin(Customizer.withDefaults())
                 .logout(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/main/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .csrf(Customizer.withDefaults())
-                .userDetailsService(authorizationService)
+                .userDetailsService(authenticationService)
                 .build();
     }
 }

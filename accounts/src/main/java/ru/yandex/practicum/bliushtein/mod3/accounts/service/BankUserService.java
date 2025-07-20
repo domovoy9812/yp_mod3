@@ -3,6 +3,7 @@ package ru.yandex.practicum.bliushtein.mod3.accounts.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.bliushtein.mod3.accounts.AccountServiceException;
 import ru.yandex.practicum.bliushtein.mod3.accounts.client.NotificationClient;
 import ru.yandex.practicum.bliushtein.mod3.accounts.data.entity.AccountEntity;
@@ -52,6 +53,7 @@ public class BankUserService {
         return userMapper.toDto(savedUserEntity);
     }
 
+    @Transactional
     public void deleteBankUser(String user) throws AccountServiceException {
         BankUserEntity userEntity = userRepository.findByName(user);
         List<AccountEntity> accounts = accountRepository.findAllByUser(userEntity);
@@ -60,5 +62,22 @@ public class BankUserService {
         } else {
             throw AccountServiceException.accountsExist(user);
         }
+    }
+
+    @Transactional
+    public void changeBankUserPassword(String user, String newPassword) {
+        BankUserEntity userEntity = userRepository.findByName(user);
+        userEntity.setPassword(newPassword);
+        userRepository.save(userEntity);
+    }
+
+    @Transactional
+    public BankUser updateBankUser(String user, String firstName, String lastName, ZonedDateTime birthdate, String email) {
+        BankUserEntity userEntity = userRepository.findByName(user);
+        userEntity.setFirstName(firstName);
+        userEntity.setLastName(lastName);
+        userEntity.setBirthdate(birthdate);
+        userEntity.setEmail(email);
+        return userMapper.toDto(userRepository.save(userEntity));
     }
 }

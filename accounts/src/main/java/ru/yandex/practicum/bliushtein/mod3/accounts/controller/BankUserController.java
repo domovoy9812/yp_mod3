@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.bliushtein.mod3.accounts.AccountServiceException;
 import ru.yandex.practicum.bliushtein.mod3.accounts.service.BankUserService;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.GenericResponse;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserWithPassword;
-import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.CreateUserRequest;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.*;
 
 @Slf4j
 @RestController
@@ -41,6 +38,22 @@ public class BankUserController {
     public BankUserResponse createBankUser(@RequestBody CreateUserRequest request) {
         return BankUserResponse.ok(bankUserService.createBankUser(request.name(), request.password(), request.firstName(),
                 request.lastName(), request.birthdate(), request.email()));
+    }
+
+    @PatchMapping("/{name}")
+    @PreAuthorize("hasAuthority('SCOPE_accounts.write')")
+    public BankUserResponse updateBankUser(@PathVariable String name,
+                                           @RequestBody UpdateUserRequest request) {
+        return BankUserResponse.ok(bankUserService.updateBankUser(name, request.firstName(), request.lastName(),
+                request.birthdate(), request.email()));
+    }
+
+    @PatchMapping("/{name}/changePassword")
+    @PreAuthorize("hasAuthority('SCOPE_accounts.write')")
+    public GenericResponse changeBankUserPassword(@PathVariable String name,
+                                                   @RequestBody ChangeUserPasswordRequest request) {
+        bankUserService.changeBankUserPassword(name, request.newPassword());
+        return GenericResponse.ok();
     }
 
     @DeleteMapping("/{name}")

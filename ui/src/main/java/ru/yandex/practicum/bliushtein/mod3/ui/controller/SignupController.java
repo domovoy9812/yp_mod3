@@ -4,30 +4,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.yandex.practicum.bliushtein.mod3.ui.service.AuthorizationService;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
+import ru.yandex.practicum.bliushtein.mod3.ui.service.BankUserService;
+import ru.yandex.practicum.bliushtein.mod3.ui.utils.ControllerUtils;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 @Controller
 @RequestMapping("/signup")
 public class SignupController {
-    private final AuthorizationService authorizationService;
-
-    public SignupController(@Autowired AuthorizationService authorizationService) {
-        this.authorizationService = authorizationService;
+    private final BankUserService userService;
+    private final ControllerUtils controllerUtils;
+    public SignupController(@Autowired BankUserService userService,
+                            @Autowired ControllerUtils controllerUtils) {
+        this.userService = userService;
+        this.controllerUtils = controllerUtils;
     }
 
     @GetMapping
@@ -46,11 +44,18 @@ public class SignupController {
                              @RequestParam String email) {
         log.debug("calling bankUserClient.createUser with name='{}', password='{}', confirmPassword='{}', firstName='{}', lastName='{}', birthdate='{}', email='{}'",
                 name, password, confirmPassword, firstName, lastName, birthdateString, email);
-        ZonedDateTime birthdate = LocalDate.parse(birthdateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                .atStartOfDay(TimeZone.getDefault().toZoneId());
-        List<String> errors = validateParameters(name, password, confirmPassword, firstName, lastName, birthdate, email);
+        List<String> errors = new ArrayList<>();
+        ZonedDateTime birthdate = controllerUtils.parseBirthdate(birthdateString, errors);
+        controllerUtils.validateUserParameters(name, password, confirmPassword, firstName, lastName, birthdate, email,
+                errors);
         if (errors.isEmpty()) {
-            authorizationService.createUser(name, password, firstName, lastName, birthdate, email);
+            BankUserResponse response = userService.createUser(name, password, firstName, lastName,
+                    birthdate, email);
+            if (!response.isSuccessful()) {
+                errors.add(response.getErrorMessage());
+            }
+        }
+        if (errors.isEmpty()) {
             return "redirect:/main";
         } else {
             model.addAttribute("errors", errors);
@@ -63,38 +68,4 @@ public class SignupController {
         }
     }
 
-    private List<String> validateParameters(String name, String password, String confirmPassword, String firstName,
-                                            String lastName, ZonedDateTime birthdate, String email) {
-        List<String> errors = new ArrayList<>();
-        if (!StringUtils.hasText(name)) {
-            errors.add("Login shouldn't be empty");
-        }
-        if (!StringUtils.hasText(password)) {
-            errors.add("Password shouldn't be empty");
-        }
-        if (!password.equals(confirmPassword)) {
-            errors.add("Password and confirm password should be equal");
-        }
-        ZonedDateTime currentDate = ZonedDateTime.now();
-        if (currentDate.minusYears(18).isBefore(birthdate)) {
-            errors.add("Age should be more than 18");
-        }
-        if (!StringUtils.hasText(firstName)) {
-            errors.add("First name shouldn't be empty");
-        }
-        if (!StringUtils.hasText(lastName)) {
-            errors.add("Last name shouldn't be empty");
-        }
-        if (!isEmailValid(email)) {
-            errors.add("Email is incorrect");
-        }
-        return errors;
-    }
-
-    private boolean isEmailValid(String email) {
-        String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$";
-        Pattern pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.find();
-    }
 }

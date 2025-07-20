@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<meta charset="UTF-8" />
 <head>
     <title>Ошибка</title>
 </head>
 
 <body>
-<a th:href="@{/orders}" style="float:right;">
-    <b>[ЗАКАЗЫ]</b>
+<a th:href="@{/signup}" style="float:right;">
+    <b>[РЕГИСТРАЦИЯ]</b>
 </a>
-<a th:href="@{/cart}" style="float:right;">
-    <b>[КОРЗИНА]</b>
-</a>
-<a th:href="@{/main}" style="float:right;">
-    <b>[ГЛАВНАЯ]</b>
+<br>
+<a th:href="@{/login}" style="float:right;">
+    <b>[ВОЙТИ]</b>
 </a>
 <h1>При выполнении запроса произошла ошибка</h1>
 <p th:text="${'Класс: ' + exClass}"></p>

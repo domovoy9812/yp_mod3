@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<meta charset="UTF-8" />
 <head>
     <title>Корзина товаров</title>
     <!-- JavaScript с релоадом таблицы курсов валют раз в секунду -->
@@ -9,17 +9,16 @@
             var td = document.getElementById('exchange_rates');
             // В fetch ссылка на эндпоинт, который возвращает список курсов валют в JSON-формате:
             // [{"title": "Рубли", "name": "RUB", "value": 100}, {"title": "Доллары", "name": "USD", "value": 200}, ...]
-            fetch('...')
+            fetch('/main/rates')
                 .then(response => response.json())
                 .then(json => {
                     var table = '<table style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">';
                     table += '<tr><th colspan="3">Курсы валют по отношению к рублю</th></tr>';
-                    table += '<tr><th>Валюта</th><th>Обозначение</th><th>Курс</th></tr>';
+                    table += '<tr><th>Валюта</th><th>Курс</th></tr>';
                     json.forEach(rate => {
                         table += '<tr>';
-                        table += '<td>' + rate.title + '</td>';
-                        table += '<td>' + rate.name + '</td>';
-                        table += '<td>' + rate.value + '</td>';
+                        table += '<td>' + rate.currency + '</td>';
+                        table += '<td>' + rate.rate + '</td>';
                         table += '</tr>';
                     });
                     table += '</table>';
@@ -31,32 +30,28 @@
 </head>
 
 <body>
-<!-- В href ссылка на страницу регистрации -->
-<a href="..." style="float:right;">
-    <b>РЕГИСТРАЦИЯ &plus;</b>
+<a th:href="@{/signup}" style="float:right;">
+    <b>[РЕГИСТРАЦИЯ]</b>
 </a>
 <br>
-<!-- В href ссылка на страницу разлогина (по умолчанию в Spring Security /logout) -->
-<a href="/logout" style="float:right;">
-    <b>ВЫЙТИ &cudarrr;</b>
+<a th:href="@{/logout}" style="float:right;">
+    <b>[ВЫЙТИ]</b>
 </a>
 <table style="width:70%;margin-left:auto;margin-right:auto;">
     <tr><td style="padding:2px;">
-    	<!-- В action ссылка на эндпоинт редактирования пароля -->
-        <form method="post" th:action="...">
+        <form method="post" th:action="@{/main/change-password}">
         <table style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
+            <tr th:if="${changePassErrors != null}" th:each="changePassError : ${changePassErrors}">
+                <!-- В text ошибка редактирования аккаунта -->
+                <td style="color:red;" th:text="${changePassError}"/>
+            </tr>
             <tr>
                 <td style="font-weight:bold;">Логин</td>
-                <!-- В text логин пользователя -->
-                <td colspan="2" th:text="..."/>
+                <td colspan="2" th:text="${user.name}"/>
             </tr>
             <tr>
                 <td style="font-weight:bold;">Изменить пароль</td>
                 <td>
-                    <!-- В if должно быть true, если есть ошибки при редактировании пароля, false, если нет -->
-                    <!-- В each итерируемся по ошибкам редактирования пароля -->
-                    <!-- В text ошибка редактирования пароля -->
-                    <p style="color:red;" th:if="..." th:each="..." th:text="..."/>
                     <p>
                         Пароль: <input name="password" type="password" required/>
                     </p>
@@ -71,42 +66,46 @@
         </table>
         </form>
     </td>
-    <tr><td style="padding:2px;">
-    	<!-- В action эндпоинт редактирования блока настроек аккаунта -->
-        <form method="post" th:action="...">
+    <tr>
+    <td style="padding:2px;">
+        <form method="post" th:action="@{/main/update}">
         <table style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
-            <!-- В if должно быть true, если есть ошибки при редактировании аккаунта, false, если нет -->
-            <!-- В each итерируемся по ошибкам редактирования аккаунта -->
-            <tr th:if="..." th:each="...">
+            <tr th:if="${updateUserErrors != null}" th:each="updateUserError : ${updateUserErrors}">
             	<!-- В text ошибка редактирования аккаунта -->
-                <td style="color:red;" th:text="..."/>
+                <td style="color:red;" th:text="${updateUserError}"/>
             </tr>
             <tr>
-                <td style="font-weight:bold;">Фамилия Имя</td>
-                <!-- В text ошибка фамилия и имя пользователя -->
-                <td th:text="..."/>
+                <td style="font-weight:bold;">Фамилия</td>
                 <td>
-                    <input name="name" type="text" style="width:100%"/>
+                    <input name="lastName" type="text" th:value="${user.lastName}" style="width:100%"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;">Имя</td>
+                <td>
+                    <input name="firstName" type="text" th:value="${user.firstName}" style="width:100%"/>
                 </td>
             </tr>
             <tr>
                 <td style="font-weight:bold;">Дата рождения</td>
-                <!-- В text дата рождения пользователя -->
-                <td th:text="..."/>
                 <td>
-                    <input name="birthdate" type="date" style="width:100%"/>
+                    <input name="birthdate" type="date" th:value="${#temporals.format(user.birthdate.toLocalDate(), 'yyyy-MM-dd')}" style="width:100%"/>
                 </td>
             </tr>
-            <!-- В each итерируемся по валютным счетам -->
-            <tr th:each="...">
-            	<!-- В text название валюты -->
-                <td style="font-weight:bold;" th:text="..."/>
+            <tr>
+                <td style="font-weight:bold;">E-mail</td>
+                <td>
+                    <input name="email" type="email" th:value="${user.email}" style="width:100%"/>
+                </td>
+            </tr>
+            <tr th:each="account : ${accounts}">
+                <td style="font-weight:bold;" th:text="${account.currency}"/>
                 <!-- В text сумма у пользователя в этой валюте -->
-                <td th:text="..."/>
+                <td th:text="${account.balance}"/>
                 <td style="text-align:right">
                     <!-- В checked должно быть true, если и пользователя есть счет с этой валютой, false, если нет -->
                     <!-- В value название валюты -->
-                    <input name="account" type="checkbox" th:checked="..." th:value="..."/>
+                    <input name="account" type="checkbox" checked="checked" th:value="${account.currency}"/>
                 </td>
             </tr>
             <tr>
@@ -116,16 +115,17 @@
             </tr>
         </table>
         </form>
-    </td></tr>
+    </td>
+    </tr>
     <tr><td style="padding:2px;">
     	<!-- В action эндпоинт блока внесения и снятия денег -->
-        <form method="post" th:action="...">
+        <form method="post" th:action="@{/main/change-balance}">
             <table style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
             	<!-- В if должно быть true, если есть ошибки при внесении/снятии денег, false, если нет -->
             	<!-- В each итерируемся по ошибкам при внесении/снятии денег -->
-                <tr th:if="..." th:each="...">
+                <tr th:if="${changeBalanceErrors != null}" th:each="changeBalanceError : ${changeBalanceErrors}" >
                     <!-- В text ошибка при внесении/снятии денег -->
-                    <td style="color:red;" th:text="..."/>
+                    <td style="color:red;" th:text="${changeBalanceError}"/>
                 </tr>
                 <tr>
                     <td style="font-weight:bold;">Наличные</td>
@@ -135,7 +135,7 @@
                             <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="..." th:value="..." th:text="..."/>
+                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
                         </select>
                     </td>
                     <td>
@@ -152,32 +152,32 @@
     </td></tr>
     <tr><td style="padding:2px;">
     	<!-- В action эндпоинт блока перевода между своими счетами -->
-        <form method="post" th:action="...">
+        <form method="post" th:action="@{/main/internal-transfer}">
             <table style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
             	<!-- В if должно быть true, если есть ошибки при переводе между своими счетами, false, если нет -->
             	<!-- В each итерируемся по ошибкам при переводе между своими счетами -->
-                <tr th:if="..." th:each="...">
+                <tr th:if="${intTransferErrors != null}" th:each="intTransferError : ${intTransferErrors}">
                     <!-- В text ошибка при переводе между своими счетами -->
-                    <td style="color:red;" th:text="..."/>
+                    <td style="color:red;" th:text="${intTransferError}"/>
                 </tr>
                 <tr>
                     <td style="font-weight:bold;">Перевод себе</td>
                     <td>
                         Со счета
-                        <select name="from_currency">
+                        <select name="from_currency" required>
                             <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="..." th:value="..." th:text="..."/>
+                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
                         </select>
                     </td>
                     <td>
                         На счет
-                        <select name="to_currency">
+                        <select name="to_currency" required>
                             <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="..." th:value="..." th:text="..."/>
+                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
                         </select>
                     </td>
                     <td>
@@ -192,13 +192,13 @@
     </td></tr>
     <tr><td style="padding:2px;">
     	<!-- В action эндпоинт блока перевода денег на счет другого аккаунта -->
-        <form method="post" th:action="...">
+        <form method="post" th:action="@{/main/external-transfer}">
             <table style="width:100%;margin-left:auto;margin-right:auto;border-radius:2%;padding:10px;background-color:whitesmoke;">
             	<!-- В if должно быть true, если есть ошибки при переводе на счет другого аккаунта, false, если нет -->
             	<!-- В each итерируемся по ошибкам при переводе на счет другого аккаунта -->
-                <tr th:if="..." th:each="...">
+                <tr th:if="${extTransferErrors != null}" th:each="extTransferError : ${extTransferErrors}">
                     <!-- В text ошибка при переводе на счет другого аккаунта -->
-                    <td style="color:red;" th:text="..."/>
+                    <td style="color:red;" th:text="${extTransferError}"/>
                 </tr>
                 <tr>
                     <td style="font-weight:bold;">Перевод другому</td>
@@ -208,7 +208,7 @@
                        	    <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="..." th:value="..." th:text="..."/>
+                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
                         </select>
                     </td>
                     <td>
@@ -217,7 +217,9 @@
                             <!-- В each итерируемся по валютам пользователя, которому будем переводить деньги -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="..." th:value="..." th:text="..."/>
+                            <option value="RUR">RUR</option>
+                            <option value="USD">USD</option>
+                            <option value="CNY">CNY</option>
                         </select>
                     </td>
                     <td>
@@ -225,12 +227,7 @@
                     </td>
                     <td>
                         Кому
-                        <select name="to_login">
-                            <!-- В each итерируемся по пользователям -->
-                            <!-- В value логин пользователя -->
-                            <!-- В text фамилия и имя пользователя -->
-                            <option th:each="..." th:value="..." th:text="..."/>
-                        </select>
+                        <input name="to_login" type="text" required/>
                     </td>
                     <td style="text-align:right">
                         <button>Перевести</button>
