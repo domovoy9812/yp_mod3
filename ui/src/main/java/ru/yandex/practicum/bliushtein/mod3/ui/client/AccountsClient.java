@@ -20,6 +20,7 @@ public class AccountsClient {
     private final static String USER_URL_TEMPLATE = "http://%s/account-service/user/{name}";
     private final static String CHANGE_PASSWORD_URL_TEMPLATE = "http://%s/account-service/user/{name}/changePassword";
     private final static String GET_USER_ACCOUNTS_URL_TEMPLATE = "http://%s/account-service/user/{name}/account/all";
+    private final static String USER_ACCOUNT_URL_TEMPLATE = "http://%s/account-service/user/{name}/account/{currency}";
 
     private final ExternalConfiguration extConfig;
     private final RestClient.Builder restClientBuilder;
@@ -88,11 +89,17 @@ public class AccountsClient {
                 .body(BankUserResponse.class);
     }
 
-    /*public void deleteUser(String name) {
-        restClientBuilder.build().delete()
-                .uri(DELETE_USER_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name)
+    public AccountResponse createAccount(String name, String currency) {
+        return restClientBuilder.build().post()
+                .uri(USER_ACCOUNT_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name, currency)
                 .retrieve()
-                .toBodilessEntity();
-    }*/
+                .body(AccountResponse.class);
+    }
 
+    public GenericResponse deleteAccount(String name, String currency) {
+        return restClientBuilder.build().delete()
+                .uri(USER_ACCOUNT_URL_TEMPLATE.formatted(extConfig.getGatewayServiceName()), name, currency)
+                .retrieve()
+                .body(GenericResponse.class);
+    }
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.GenericResponse;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.Account;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.AccountResponse;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUserResponse;
 import ru.yandex.practicum.bliushtein.mod3.ui.client.AccountsClient;
@@ -46,5 +47,28 @@ public class BankUserService {
             errors.add(response.getErrorMessage());
         }
         return response.getBankUser();
+    }
+
+    public void addRemoveAccounts(String name, List<String> targetAccounts, List<String> errors) {
+        List<String> existingAccounts = accountsClient.getUserAccounts(name).getAccounts()
+                .stream().map(Account::getCurrency).toList();
+        List<String> toDelete = existingAccounts.stream()
+                .filter(account -> !targetAccounts.contains(account))
+                .toList();
+        List<String> toCreate = targetAccounts.stream()
+                .filter(account -> !existingAccounts.contains(account))
+                .toList();
+        toCreate.forEach(currency -> {
+            AccountResponse response = accountsClient.createAccount(name, currency);
+            if (!response.isSuccessful()) {
+                errors.add(response.getErrorMessage());
+            }
+        });
+        toDelete.forEach(currency -> {
+            GenericResponse response = accountsClient.deleteAccount(name, currency);
+            if (!response.isSuccessful()) {
+                errors.add(response.getErrorMessage());
+            }
+        });
     }
 }

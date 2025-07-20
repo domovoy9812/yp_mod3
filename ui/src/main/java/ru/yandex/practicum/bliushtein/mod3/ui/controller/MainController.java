@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.Account;
 import ru.yandex.practicum.bliushtein.mod3.shared.dto.accounts.BankUser;
 import ru.yandex.practicum.bliushtein.mod3.ui.dto.ExchangeRate;
 import ru.yandex.practicum.bliushtein.mod3.ui.service.BankUserService;
@@ -15,6 +16,7 @@ import ru.yandex.practicum.bliushtein.mod3.ui.utils.ControllerUtils;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -44,7 +46,6 @@ public class MainController {
     @ResponseBody
     public List<ExchangeRate> getRates() {
         return operationsService.getExchangeRates();
-        //return List.of(new ExchangeRate("USD", 0.1f), new ExchangeRate("CNY", 5f));
     }
 
     @PostMapping("/change-password")
@@ -71,7 +72,8 @@ public class MainController {
                                  @RequestParam(required = false) String firstName,
                                  @RequestParam(required = false) String lastName,
                                  @RequestParam(value = "birthdate", required = false) String birthdateString,
-                                 @RequestParam(required = false) String email) {
+                                 @RequestParam(required = false) String email,
+                                 @RequestParam("account") List<String> accounts) {
         String name = authentication.getName();
         List<String> errors = new ArrayList<>();
         ZonedDateTime birthdate = controllerUtils.parseBirthdate(birthdateString, errors);
@@ -79,6 +81,7 @@ public class MainController {
         controllerUtils.validateSecondaryParameters(firstName, lastName, birthdate, email, errors);
         if (errors.isEmpty()) {
             bankUser = userService.updateBankUser(name, firstName, lastName, birthdate, email, errors);
+            userService.addRemoveAccounts(name, accounts, errors);
         }
         if (!errors.isEmpty()) {
             model.addAttribute("updateUserErrors", errors);
@@ -158,7 +161,9 @@ public class MainController {
             bankUser = userService.getUser(user);
         }
         model.addAttribute("user", bankUser);
-        model.addAttribute("accounts", userService.getUserAccounts(user));
+        List<Account> accounts = userService.getUserAccounts(user);
+        model.addAttribute("balanceMap", accounts.stream().collect(Collectors.toMap(Account::getCurrency, Account::getBalance)));
+        model.addAttribute("availableAccounts", accounts.stream().map(Account::getCurrency).toList());
 
     }
 }

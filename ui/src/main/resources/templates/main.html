@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <meta charset="UTF-8" />
 <head>
-    <title>Корзина товаров</title>
+    <title>Банк</title>
     <!-- JavaScript с релоадом таблицы курсов валют раз в секунду -->
     <script language="JavaScript">
         setInterval(() => {
@@ -98,14 +98,25 @@
                     <input name="email" type="email" th:value="${user.email}" style="width:100%"/>
                 </td>
             </tr>
-            <tr th:each="account : ${accounts}">
-                <td style="font-weight:bold;" th:text="${account.currency}"/>
-                <!-- В text сумма у пользователя в этой валюте -->
-                <td th:text="${account.balance}"/>
+            <tr>
+                <td style="font-weight:bold;" >RUR</td>
+                <td th:text="${balanceMap.get('RUR')}"/>
                 <td style="text-align:right">
-                    <!-- В checked должно быть true, если и пользователя есть счет с этой валютой, false, если нет -->
-                    <!-- В value название валюты -->
-                    <input name="account" type="checkbox" checked="checked" th:value="${account.currency}"/>
+                    <input name="account" type="checkbox" th:checked="${balanceMap.containsKey('RUR')}" value="RUR"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;" >USD</td>
+                <td th:text="${balanceMap.get('USD')}"/>
+                <td style="text-align:right">
+                    <input name="account" type="checkbox" th:checked="${balanceMap.containsKey('USD')}" value="USD"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;" >CNY</td>
+                <td th:text="${balanceMap.get('CNY')}"/>
+                <td style="text-align:right">
+                    <input name="account" type="checkbox" th:checked="${balanceMap.containsKey('CNY')}" value="CNY"/>
                 </td>
             </tr>
             <tr>
@@ -135,7 +146,7 @@
                             <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
+                            <option th:each="account : ${availableAccounts}" th:value="${account}" th:text="${account}"/>
                         </select>
                     </td>
                     <td>
@@ -168,7 +179,7 @@
                             <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
+                            <option th:each="account : ${availableAccounts}" th:value="${account}" th:text="${account}"/>
                         </select>
                     </td>
                     <td>
@@ -177,7 +188,7 @@
                             <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
+                            <option th:each="account : ${availableAccounts}" th:value="${account}" th:text="${account}"/>
                         </select>
                     </td>
                     <td>
@@ -208,7 +219,7 @@
                        	    <!-- В each итерируемся по валютам пользователя -->
                             <!-- В value код валюты -->
                             <!-- В text название валюты -->
-                            <option th:each="account : ${accounts}" th:value="${account.currency}" th:text="${account.currency}"/>
+                            <option th:each="account : ${availableAccounts}" th:value="${account}" th:text="${account}"/>
                         </select>
                     </td>
                     <td>
